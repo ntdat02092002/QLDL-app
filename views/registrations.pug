@@ -1,0 +1,21 @@
+extends layout
+
+block content
+
+    if registrations.length
+        table
+            tr
+                th TenDL
+                th Email
+                th DiaChi
+                th SDT
+            each registration in registrations
+                tr
+                    td= registration.TenDaiLy
+                    td= registration.Email
+                    td= registration.DiaChi
+                    td= registration.DienThoai
+    else
+        p No registrations yet :(
+
+    a(href="/registrations/create") Create new

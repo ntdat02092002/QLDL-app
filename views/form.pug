@@ -1,0 +1,44 @@
+extends layout
+
+block content
+    -data = data || {}
+
+    if errors
+        ul
+            for error in errors
+                li= error.msg
+
+    form(action="/registrations/create" method="POST")
+        label(for="name") TenDL:
+        input(
+            type="text"
+            id="name"
+            name="name"
+            value=data.name
+        )
+
+        label(for="email") Email:
+        input(
+            type="email"
+            id="email"
+            name="email"
+            value=data.email
+        )
+
+        label(for="address") DiaChi:
+            input(
+                type="text"
+                id="address"
+                name="address"
+                value=data.address
+            )
+
+            label(for="phoneNumber") SDT:
+            input(
+                type="text"
+                id="phoneNumber"
+                name="phoneNumber"
+                value=data.phoneNumber
+            )
+
+        input(type="submit" value="Submit")

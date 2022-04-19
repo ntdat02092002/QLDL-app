@@ -7,11 +7,15 @@ const con = mysql.createPool({
     acquireTimeout  : 60 * 60 * 1000,
     timeout         : 60 * 60 * 1000,
     host: process.env.HOST,
-    port: process.env.PORT,
+    //host: 'sql10.freemysqlhosting.net',
+    port: process.env.DB_PORT,
+    //port: 3306,
     //user: process.env.USER,
     user: 'sql10486696',
     password: process.env.PASSWORD,
+    //password: 'rXdE5Gy1Ts',
     database: process.env.DATABASE
+    //database: 'sql10486696'
 });
 
 module.exports = con;

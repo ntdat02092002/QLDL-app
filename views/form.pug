@@ -2,43 +2,44 @@ extends layout
 
 block content
     -data = data || {}
+    -action = action || "/registrations/create"
 
     if errors
         ul
             for error in errors
                 li= error.msg
 
-    form(action="/registrations/create" method="POST")
+    form(action=`${action}` method="POST")
         label(for="name") TenDL:
         input(
             type="text"
             id="name"
-            name="name"
-            value=data.name
+            name="TenDaiLy"
+            value=data.TenDaiLy
         )
 
         label(for="email") Email:
         input(
             type="email"
             id="email"
-            name="email"
-            value=data.email
+            name="Email"
+            value=data.Email
         )
 
         label(for="address") DiaChi:
             input(
                 type="text"
                 id="address"
-                name="address"
-                value=data.address
+                name="DiaChi"
+                value=data.DiaChi
             )
 
             label(for="phoneNumber") SDT:
             input(
                 type="text"
                 id="phoneNumber"
-                name="phoneNumber"
-                value=data.phoneNumber
+                name="DienThoai"
+                value=data.DienThoai
             )
 
         input(type="submit" value="Submit")

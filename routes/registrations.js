@@ -26,7 +26,6 @@ router.get('/', basic.check((req, res) => {
 }));
 
 //route for create new daily
-let countNumber = 1;
 
 router.get('/create', basic.check((req, res) => {
     res.render('form', { title: 'Registration form'});
@@ -49,9 +48,9 @@ router.post('/create',
             console.log(data)
 
             // save data into db
-            const sql = "INSERT INTO DAILY (MaDaiLy, TenDaiLy, DienThoai, DiaChi, Email) VALUES ?";
+            const sql = "INSERT INTO DAILY (TenDaiLy, DienThoai, DiaChi, Email) VALUES ?";
             const values = [
-                ["DL00" + countNumber, data.TenDaiLy, data.DienThoai, data.DiaChi, data.Email]
+                [data.TenDaiLy, data.DienThoai, data.DiaChi, data.Email]
             ];
             console.log("ok ready to insert")
             con.getConnection(function (err, connection) {
@@ -62,7 +61,6 @@ router.post('/create',
                 });
             });
 
-            countNumber ++;
             res.render('form-submitted', {
                 title: 'Registration success',
             });

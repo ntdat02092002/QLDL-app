@@ -3,6 +3,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 
 const rootRoutes = require('./routes/index');
+const xuathangRoutes = require('./routes/xuat-hang')
 const regsRoutes = require('./routes/registrations');
 
 const app = express();
@@ -13,6 +14,7 @@ app.set('view engine', 'pug');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/', rootRoutes);
 app.use('/registrations', regsRoutes);
+app.use('/xuat-hang', xuathangRoutes);
 app.use(express.static('public'));
 
 module.exports = app;

@@ -59,7 +59,7 @@ head
                     '</select></td>' +
                     '<td><input type="text" class="form-control" name="DonViTinh" id="donvitinh" disabled value=" "></td>' +
                     '<td><input type="text" class="form-control" name="SoLuong" id="soluong"></td>' +
-                    '<td><input type="text" class="form-control" name="Don"Gia id="dongia" disabled value=" "> </td>' +
+                    '<td><input type="text" class="form-control" name="DonGia" id="dongia" disabled value=" "> </td>' +
                     '<td><input type="text" class="form-control" name="ThanhTien" id="thanhtien" disabled value=" "></td>' +
                     '<td>' + actions + '</td>' +
                     '</tr>';
@@ -87,11 +87,16 @@ head
                     var dongia = datas.filter(data => data.name == name)[0].dongia;
                     var thanhtien = dongia*soluong;
                     var values = [name, donvitinh, soluong, dongia, thanhtien];
+                    var names = ["TenMatHang", "DonViTinh", "SoLuong", "DonGia", "ThanhTien"];
                     input.each(function(i){
-                        $(this).parent("td").html(values[i]);
+                        $(this).parent("td").html(
+                            '<div>'+values[i]+'</div>' +
+                            '<input type="hidden" name="'+names[i] +'[]" value="' + values[i] +'">'
+                        );
                     });
                     var tongtien = parseInt($("#tongtien").html()) + thanhtien;
                     $("#tongtien").html(tongtien);
+                    $("#inputtongtien").val(tongtien);
                     $(this).parents("tr").find(".add, .edit").toggle();
                     $(".add-new").removeAttr("disabled");
                 }
@@ -107,9 +112,11 @@ head
             // Delete row on delete button click
             $(document).on("click", ".delete", function(){
                 var td = $(this).parents("tr").find('td');
-                var thanhtien = $(td[4]).html();
+                var divthanhtien = ($(td[4]).find("div"))[0];
+                var thanhtien = $(divthanhtien).html() || 0;
                 var tongtien = parseInt($("#tongtien").html()) - thanhtien;
                 $("#tongtien").html(tongtien);
+                $("#inputtongtien").val(tongtien);
                 $(this).parents("tr").remove();
                 $(".add-new").removeAttr("disabled");
             });
@@ -119,7 +126,7 @@ head
                 option += '<option value="'+data.tendaily +'">'+data.tendaily+'</option>';
             });
             $('.tendaily').html(
-                '<select class="form-control" name="Mặt hàng" id="tendaily" > ' +
+                '<select class="form-control" name="TenDaiLy" id="tendaily" > ' +
                 option +
                 '</select>'
             );
@@ -139,50 +146,59 @@ head
                 var sotientra =  parseInt($("#sotientra").val())
                 var conlai = tongtien - sotientra;
                 $("#conlai").html(conlai);
+                $("#inputconlai").val(conlai);
             });
         });
 .container-lg
     .table-responsive
-        .table-wrapper
-            .table-title
-                .row
-                    .col-sm-12.text-center
-                        h1 Phi&#x1EBF;u xu&#x1EA5;t h&agrave;ng
-            .table-title
-                .row
-                    .col-sm-4
-                        h2 T&ecirc;n &dstrok;&#x1EA1;i l&yacute;
-                        .tendaily
-                    .col-sm-4
-                        h2 Ng&agrave;y l&#x1EAD;p phi&#x1EBF;u
-                        input.form-control.ngaylapphieu(type='date')
-                    .col-sm-4
-                        button.btn.btn-info.add-new(type='button')
-                            i.fa.fa-plus
-                            |  Th&ecirc;m m&#x1EB7;t h&agrave;ng
-            table.table.table-bordered
-                thead
-                    tr
-                        th M&#x1EB7;t h&agrave;ng
-                        th &Dstrok;&#x1A1;n v&#x1ECB; t&iacute;nh
-                        th S&#x1ED1; l&#x1B0;&#x1EE3;ng
-                        th &Dstrok;&#x1A1;n gi&aacute;
-                        th Th&agrave;nh ti&#x1EC1;n
-                        th Action
-                tbody
-            .table-title
-                .row
-                    .col-sm-8.text-right T&#x1ED5;ng ti&#x1EC1;n:
-                    #tongtien.col-sm-4
-                        | 0
-            .table-title
-                .row
-                    .col-sm-8.text-right S&#x1ED1; ti&#x1EC1;n tr&#x1EA3;:
-                    input#sotientra.col-sm-2.form-control(type='text' value='0')
-            .table-title
-                .row
-                    .col-sm-8.text-right C&ograve;n l&#x1EA1;i:
-                    #conlai.col-sm-2
-                    // <input class="col-sm-2 form-control" type="text" id="conlai" value="0" disabled>
-                    .col-sm-2
-                        button.btn.btn-success.check-conlai(type='button') check
+        form(action='/xuat-hang/submit' method='post')
+            .table-wrapper
+                .table-title
+                    .row
+                        .col-sm-12.text-center
+                            h1 Phi&#x1EBF;u xu&#x1EA5;t h&agrave;ng
+                .table-title
+                    .row
+                        .col-sm-4
+                            h2 T&ecirc;n &dstrok;&#x1EA1;i l&yacute;
+                            .tendaily
+                        .col-sm-4
+                            h2 Ng&agrave;y l&#x1EAD;p phi&#x1EBF;u
+                            input.form-control.ngaylapphieu(type='date' name='NgayLapPhieu')
+                        .col-sm-4
+                            button.btn.btn-info.add-new(type='button')
+                                i.fa.fa-plus
+                                |  Th&ecirc;m m&#x1EB7;t h&agrave;ng
+                table.table.table-bordered
+                    thead
+                        tr
+                            th M&#x1EB7;t h&agrave;ng
+                            th &Dstrok;&#x1A1;n v&#x1ECB; t&iacute;nh
+                            th S&#x1ED1; l&#x1B0;&#x1EE3;ng
+                            th &Dstrok;&#x1A1;n gi&aacute;
+                            th Th&agrave;nh ti&#x1EC1;n
+                            th Action
+                    tbody
+                .table-title
+                    .row
+                        .col-sm-8.text-right T&#x1ED5;ng ti&#x1EC1;n:
+                        #tongtien.col-sm-4
+                            | 0
+                        input#inputtongtien(type='hidden' name='TongTien' value='0')
+                .table-title
+                    .row
+                        .col-sm-8.text-right S&#x1ED1; ti&#x1EC1;n tr&#x1EA3;:
+                        input#sotientra.col-sm-2.form-control(type='text' value='0')
+                .table-title
+                    .row
+                        // <div class="col-sm-8 text-right">Còn lại:</div>
+                        .col-sm-8.text-righ
+                            button.btn.btn-success.check-conlai(type='button') C&ograve;n l&#x1EA1;i:
+                        #conlai.col-sm-2
+                        input#inputconlai(type='hidden' name='ConLai' value='0')
+                .table-title
+                    .row
+                        .col-sm-8
+                        .col-sm-2
+                        .col-sm-2
+                            button.btn.btn-primary(type='submit' onclick='$(".check-conlai").click();return confirm("are you sure?")') submit

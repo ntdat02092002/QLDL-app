@@ -62,7 +62,7 @@
                     '</select></td>' +
                     '<td><input type="text" class="form-control" name="DonViTinh" id="donvitinh" disabled value=" "></td>' +
                     '<td><input type="text" class="form-control" name="SoLuong" id="soluong"></td>' +
-                    '<td><input type="text" class="form-control" name="Don"Gia id="dongia" disabled value=" "> </td>' +
+                    '<td><input type="text" class="form-control" name="DonGia" id="dongia" disabled value=" "> </td>' +
                     '<td><input type="text" class="form-control" name="ThanhTien" id="thanhtien" disabled value=" "></td>' +
                     '<td>' + actions + '</td>' +
                     '</tr>';
@@ -91,12 +91,17 @@
                     var dongia = datas.filter(data => data.name == name)[0].dongia;
                     var thanhtien = dongia*soluong;
                     var values = [name, donvitinh, soluong, dongia, thanhtien];
+                    var names = ["TenMatHang", "DonViTinh", "SoLuong", "DonGia", "ThanhTien"];
                     input.each(function(i){
-                        $(this).parent("td").html(values[i]);
+                        $(this).parent("td").html(
+                            '<div>'+values[i]+'</div>' +
+                            '<input type="hidden" name="'+names[i] +'[]" value="' + values[i] +'">'
+                        );
                     });
 
                     var tongtien = parseInt($("#tongtien").html()) + thanhtien;
                     $("#tongtien").html(tongtien);
+                    $("#inputtongtien").val(tongtien);
 
                     $(this).parents("tr").find(".add, .edit").toggle();
                     $(".add-new").removeAttr("disabled");
@@ -112,11 +117,12 @@
             // });
             // Delete row on delete button click
             $(document).on("click", ".delete", function(){
-
                 var td = $(this).parents("tr").find('td');
-                var thanhtien = $(td[4]).html();
+                var divthanhtien = ($(td[4]).find("div"))[0];
+                var thanhtien = $(divthanhtien).html() || 0;
                 var tongtien = parseInt($("#tongtien").html()) - thanhtien;
                 $("#tongtien").html(tongtien);
+                $("#inputtongtien").val(tongtien);
 
                 $(this).parents("tr").remove();
                 $(".add-new").removeAttr("disabled");
@@ -128,7 +134,7 @@
                 option += '<option value="'+data.tendaily +'">'+data.tendaily+'</option>';
             });
             $('.tendaily').html(
-                '<select class="form-control" name="Mặt hàng" id="tendaily" > ' +
+                '<select class="form-control" name="TenDaiLy" id="tendaily" > ' +
                 option +
                 '</select>'
             );
@@ -150,6 +156,7 @@
                 var sotientra =  parseInt($("#sotientra").val())
                 var conlai = tongtien - sotientra;
                 $("#conlai").html(conlai);
+                $("#inputconlai").val(conlai);
             });
         });
     </script>
@@ -157,29 +164,30 @@
 <body>
 <div class="container-lg">
     <div class="table-responsive">
-        <div class="table-wrapper">
-            <div class="table-title">
-                <div class="row">
-                    <div class="col-sm-12 text-center"><h1>Phiếu xuất hàng</h1></div>
-                </div>
-            </div>
-            <div class="table-title">
-                <div class="row">
-                    <div class="col-sm-4">
-                        <h2>Tên đại lý</h2>
-                        <div class="tendaily"></div>
-                    </div>
-                    <div class="col-sm-4">
-                        <h2>Ngày lập phiếu</h2>
-                        <input type="date" class="form-control ngaylapphieu">
-                    </div>
-                    <div class="col-sm-4">
-                        <button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Thêm mặt hàng</button>
+        <form action="/xuat-hang/submit" method="post">
+            <div class="table-wrapper">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-12 text-center"><h1>Phiếu xuất hàng</h1></div>
                     </div>
                 </div>
-            </div>
-            <table class="table table-bordered">
-                <thead>
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <h2>Tên đại lý</h2>
+                            <div class="tendaily"></div>
+                        </div>
+                        <div class="col-sm-4">
+                            <h2>Ngày lập phiếu</h2>
+                            <input type="date" class="form-control ngaylapphieu" name="NgayLapPhieu">
+                        </div>
+                        <div class="col-sm-4">
+                            <button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Thêm mặt hàng</button>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
                     <tr>
                         <th>Mặt hàng</th>
                         <th>Đơn vị tính</th>
@@ -188,35 +196,46 @@
                         <th>Thành tiền</th>
                         <th>Action</th>
                     </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-            <div class="table-title">
-                <div class="row">
-                    <div class="col-sm-8 text-right">Tổng tiền:</div>
-                    <div class="col-sm-4" id="tongtien">
-                        0
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-8 text-right">Tổng tiền:</div>
+                        <div class="col-sm-4" id="tongtien">
+                            0
+                        </div>
+                        <input type="hidden" name="TongTien" id="inputtongtien" value="0">
+                    </div>
+                </div>
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-8 text-right">Số tiền trả:</div>
+                        <input class="col-sm-2 form-control" type="text" id="sotientra" value="0">
+                    </div>
+                </div>
+                <div class="table-title">
+                    <div class="row">
+                        <!--<div class="col-sm-8 text-right">Còn lại:</div>-->
+                        <div class="col-sm-8 text-righ">
+                            <button type="button" class="btn btn-success check-conlai">Còn lại:</button>
+                        </div>
+                        <div class="col-sm-2" id="conlai"></div>
+                        <input type="hidden" name="ConLai" id="inputconlai" value="0">
+                    </div>
+                </div>
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-8 "></div>
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-2">
+                            <button type="submit" class="btn btn-primary" onclick='$(".check-conlai").click();return confirm("are you sure?")'>submit</button>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="table-title">
-                <div class="row">
-                    <div class="col-sm-8 text-right">Số tiền trả:</div>
-                    <input class="col-sm-2 form-control" type="text" id="sotientra" value="0">
-                </div>
-            </div>
-            <div class="table-title">
-                <div class="row">
-                    <div class="col-sm-8 text-right">Còn lại:</div>
-                    <div class="col-sm-2" id="conlai"></div>
-                    <!--<input class="col-sm-2 form-control" type="text" id="conlai" value="0" disabled>-->
-                    <div class="col-sm-2">
-                        <button type="button" class="btn btn-success check-conlai">check</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </form>
     </div>
 </div>
 </body>

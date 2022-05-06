@@ -13,35 +13,51 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="../../public/css/xuat_hang/xuat-hang.css">
     <script>
+        var canSubmit = true;
+        const isCanSubmit = () => canSubmit;
+
         $(document).ready(function(){
             var datas = [
                 {
-                    name: "test1",
-                    dongia: "123",
-                    donvitinh: "quyen",
+                    MaMatHang: 1,
+                    TenMatHang: "test1",
+                    DonGiaNhap: "123",
+                    TenDVT: "quyen",
                 },
                 {
-                    name: "test2",
-                    dongia: "345",
-                    donvitinh: "hop",
+                    MaMatHang: 2,
+                    TenMatHang: "test2",
+                    DonGiaNhap: "345",
+                    TenDVT: "hop",
                 },
                 {
-                    name: "test3",
-                    dongia: "567",
-                    donvitinh: "cai",
+                    MaMatHang: 3,
+                    TenMatHang: "test3",
+                    DonGiaNhap: "567",
+                    TenDVT: "cai",
                 },
             ];
             var dailys = [
                 {
-                    tendaily: "daily1",
+                    MaDaiLy: 1,
+                    TenDaiLy: "daily1",
+                    TienNo: 10,
+                    SoNoToiDa: 100000
                 },
                 {
-                    tendaily: "daily2",
+                    MaDaiLy: 2,
+                    TenDaiLy: "daily2",
+                    TienNo: 10,
+                    SoNoToiDa: 100000
                 },
                 {
-                    tendaily: "daily3",
+                    MaDaiLy: 3,
+                    TenDaiLy: "daily3",
+                    TienNo: 10,
+                    SoNoToiDa: 100000
                 },
-            ]
+            ];
+            var TyLeXuat = 102;
 
             $('[data-toggle="tooltip"]').tooltip();
             var actions = '<a class="add" title=""  data-original-title="Add"><i class="material-icons">&#xE03B;</i></a> \n' +
@@ -54,14 +70,14 @@
 
                 var list = '';
                 $.each(datas, function(i, data) {
-                    list += '<option value="'+data.name +'">'+data.name+'</option>';
+                    list += '<option value="'+data.MaMatHang +'">'+data.TenMatHang+'</option>';
                 })
                 var row = '<tr>' +
                     '<td><select class="form-control" name="Mặt hàng" id="mathang" > ' +
                         list +
                     '</select></td>' +
                     '<td><input type="text" class="form-control" name="DonViTinh" id="donvitinh" disabled value=" "></td>' +
-                    '<td><input type="text" class="form-control" name="SoLuong" id="soluong"></td>' +
+                    '<td><input type="text" class="form-control" name="SoLuong" id="soluong" oninput="this.value = this.value.replace(/[^0-9.]/g, \'\').replace(/(\\..*?)\\..*/g, \'$1\');"></td>' +
                     '<td><input type="text" class="form-control" name="DonGia" id="dongia" disabled value=" "> </td>' +
                     '<td><input type="text" class="form-control" name="ThanhTien" id="thanhtien" disabled value=" "></td>' +
                     '<td>' + actions + '</td>' +
@@ -85,17 +101,19 @@
                 $(this).parents("tr").find(".error").first().focus();
                 if(!empty){
 
-                    var name = $(input[0]).val();
-                    var donvitinh = datas.filter(data => data.name == name)[0].donvitinh;
+                    var id = $(input[0]).val();
+                    var name = datas.filter(data => data.MaMatHang == id)[0].TenMatHang;
+                    var donvitinh = datas.filter(data => data.MaMatHang == id)[0].TenDVT;
                     var soluong = $(input[2]).val();
-                    var dongia = datas.filter(data => data.name == name)[0].dongia;
+                    var dongia = Math.round(datas.filter(data => data.MaMatHang == id)[0].DonGiaNhap * (TyLeXuat/100));
                     var thanhtien = dongia*soluong;
-                    var values = [name, donvitinh, soluong, dongia, thanhtien];
-                    var names = ["TenMatHang", "DonViTinh", "SoLuong", "DonGia", "ThanhTien"];
+                    var valuesInput = [id, donvitinh, soluong, dongia, thanhtien];
+                    var valuesDisplay = [name, donvitinh, soluong, dongia, thanhtien];
+                    var names = ["MaMatHang", "DonViTinh", "SoLuong", "DonGia", "ThanhTien"];
                     input.each(function(i){
                         $(this).parent("td").html(
-                            '<div>'+values[i]+'</div>' +
-                            '<input type="hidden" name="'+names[i] +'[]" value="' + values[i] +'">'
+                            '<div>'+valuesDisplay[i]+'</div>' +
+                            '<input type="hidden" name="'+names[i] +'[]" value="' + valuesInput[i] +'">'
                         );
                     });
 
@@ -130,11 +148,11 @@
 
             //set select box of tendaily
             var option = '';
-            $.each(dailys, function(i, data) {
-                option += '<option value="'+data.tendaily +'">'+data.tendaily+'</option>';
+            $.each(dailys, function(i, item) {
+                option += '<option value="'+item.MaDaiLy +'">'+item.TenDaiLy+'</option>';
             });
             $('.tendaily').html(
-                '<select class="form-control" name="TenDaiLy" id="tendaily" > ' +
+                '<select class="form-control" name="MaDaiLy" id="madaily" > ' +
                 option +
                 '</select>'
             );
@@ -157,6 +175,20 @@
                 var conlai = tongtien - sotientra;
                 $("#conlai").html(conlai);
                 $("#inputconlai").val(conlai);
+
+                var iddaily = $("#madaily").val();
+                var daily = dailys.filter(data => data.MaDaiLy == iddaily)[0];
+                var notoidacothe = daily.SoNoToiDa - daily.TienNo;
+                if (conlai > notoidacothe) {
+                    alert("So tien con lai vuot qua so tien co the tiep tuc no");
+                    $("#submit").attr("disabled", "disabled");
+                    canSubmit = false;
+                }
+                else {
+                    $("#submit").removeAttr("disabled");
+                    canSubmit = true;
+                }
+
             });
         });
     </script>
@@ -168,7 +200,10 @@
             <div class="table-wrapper">
                 <div class="table-title">
                     <div class="row">
-                        <div class="col-sm-12 text-center"><h1>Phiếu xuất hàng</h1></div>
+                        <div class="col-sm-2">
+                            <a href="/" class="goback"><i class="fa fa-chevron-circle-left fa-3x" aria-hidden="true"></i></a>
+                        </div>
+                        <div class="col-sm-8 text-center"><h1>Phiếu xuất hàng</h1></div>
                     </div>
                 </div>
                 <div class="table-title">
@@ -181,7 +216,7 @@
                             <h2>Ngày lập phiếu</h2>
                             <input type="date" class="form-control ngaylapphieu" name="NgayLapPhieu">
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-4 align-self-end">
                             <button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Thêm mặt hàng</button>
                         </div>
                     </div>
@@ -212,7 +247,7 @@
                 <div class="table-title">
                     <div class="row">
                         <div class="col-sm-8 text-right">Số tiền trả:</div>
-                        <input class="col-sm-2 form-control" type="text" id="sotientra" value="0">
+                        <input class="col-sm-2 form-control" type="text" id="sotientra" value="0" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                     </div>
                 </div>
                 <div class="table-title">
@@ -227,10 +262,10 @@
                 </div>
                 <div class="table-title">
                     <div class="row">
-                        <div class="col-sm-8 "></div>
+                        <div class="col-sm-8"></div>
                         <div class="col-sm-2"></div>
                         <div class="col-sm-2">
-                            <button type="submit" class="btn btn-primary" onclick='$(".check-conlai").click();return confirm("are you sure?")'>submit</button>
+                            <button type="submit" class="btn btn-primary" id="submit" onclick='$(".check-conlai").click(); if(isCanSubmit()) return confirm("are you sure?")'>submit</button>
                         </div>
                     </div>
                 </div>

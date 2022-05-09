@@ -1,6 +1,7 @@
 const express = require('express');
 
-const con = require('../models/db-conncect')
+const connection = require('../helpers/db-connection');
+const query = require('../helpers/db-query');
 const path = require('path');
 const auth = require('http-auth');
 const {check, validationResult} = require("express-validator");
@@ -12,16 +13,7 @@ const basic = auth.basic({
 });
 
 router.get('/', basic.check((req, res) => {
-    /*con.getConnection(function (err, connection) {
-        const sql = "SELECT * From DAILY";
-        connection.query(sql, function (err, registrations) {
-            connection.release();
-            if (err)
-                res.send('Sorry! Something went wrong.');
-            else
-                res.render('registrations', { title: 'Listing registrations', registrations });
-        });
-    });*/
+
     res.send("chua co gi het~");
 }));
 

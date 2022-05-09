@@ -12,6 +12,9 @@ head
     script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js')
     link(rel='stylesheet' href='/css/xuat_hang/xuat-hang.css')
     script.
+        //get arrayOfDaiLy from pug render:
+        let arrayOfDaily = !{JSON.stringify(arrayOfDaily)};
+
         var canSubmit = true;
         const isCanSubmit = () => canSubmit;
         $(document).ready(function(){
@@ -35,26 +38,28 @@ head
                     TenDVT: "cai",
                 },
             ];
-            var dailys = [
-                {
-                    MaDaiLy: 1,
-                    TenDaiLy: "daily1",
-                    TienNo: 10,
-                    SoNoToiDa: 100000
-                },
-                {
-                    MaDaiLy: 2,
-                    TenDaiLy: "daily2",
-                    TienNo: 10,
-                    SoNoToiDa: 100000
-                },
-                {
-                    MaDaiLy: 3,
-                    TenDaiLy: "daily3",
-                    TienNo: 10,
-                    SoNoToiDa: 100000
-                },
-            ];
+            var dailys = arrayOfDaily;
+            console.log(dailys);
+            // var dailys = [
+            //     {
+            //         MaDaiLy: 1,
+            //         TenDaiLy: "daily1",
+            //         TienNo: 10,
+            //         SoNoToiDa: 100000
+            //     },
+            //     {
+            //         MaDaiLy: 2,
+            //         TenDaiLy: "daily2",
+            //         TienNo: 10,
+            //         SoNoToiDa: 100000
+            //     },
+            //     {
+            //         MaDaiLy: 3,
+            //         TenDaiLy: "daily3",
+            //         TienNo: 10,
+            //         SoNoToiDa: 100000
+            //     },
+            // ];
             var TyLeXuat = 102;
             $('[data-toggle="tooltip"]').tooltip();
             var actions = '<a class="add" title=""  data-original-title="Add"><i class="material-icons">&#xE03B;</i></a>' +

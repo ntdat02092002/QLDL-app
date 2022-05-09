@@ -1,6 +1,9 @@
 const express = require('express');
 
 const con = require('../models/db-conncect')
+const connection = require('../helpers/db-connection');
+const query = require('../helpers/db-query');
+
 const path = require('path');
 const auth = require('http-auth');
 const {check, validationResult} = require("express-validator");
@@ -12,23 +15,29 @@ const basic = auth.basic({
 });
 
 //route show all daily
-router.get('/', basic.check((req, res) => {
-    con.getConnection(function (err, connection) {
-        const sql = "SELECT * From DAILY";
+router.get('/', basic.check(async (req, res) => {
+    const conn = await connection().catch(e => {})
+    const sql = "SELECT * From DAILY";
+    const results = await query(conn, sql)
+        //.then(result => console.log(result))
+        .catch(e => res.send('Sorry! Something went wrong.'));
+    res.render('demo/registrations', { title: 'Listing registrations', registrations: results });
+
+    /*con.getConnection(function (err, connection) {
         connection.query(sql, function (err, registrations) {
             connection.release();
             if (err)
                 res.send('Sorry! Something went wrong.');
             else
-                res.render('registrations', { title: 'Listing registrations', registrations });
+                res.render('demo/registrations', { title: 'Listing registrations', registrations });
         });
-    });
+    });*/
 }));
 
 //route for create new daily
 
 router.get('/create', basic.check((req, res) => {
-    res.render('form', { title: 'Registration form'});
+    res.render('demo/form', { title: 'Registration form'});
 }));
 
 router.post('/create',
@@ -61,7 +70,7 @@ router.post('/create',
                 });
             });
 
-            res.render('form-submitted', {
+            res.render('demo/form-submitted', {
                 title: 'Registration success',
             });
         } else {
@@ -102,7 +111,7 @@ router.get('/edit/:id', basic.check((req, res) => {
             if (rows.length <= 0)
                 res.send('Sorry! Something went wrong.');
             else
-                res.render('form', {
+                res.render('demo/form', {
                     title: 'Update form',
                     action: '/registrations/edit/' + id,
                     data: rows[0],
@@ -138,8 +147,7 @@ router.post('/edit/:id',
                 });
             });
 
-            countNumber ++;
-            res.render('form-submitted', {
+            res.render('demo/form-submitted', {
                 title: 'Update success',
             });
         } else {

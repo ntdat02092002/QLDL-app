@@ -15,10 +15,17 @@ const basic = auth.basic({
 
 router.get('/', basic.check(async (req, res) => {
     const conn = await connection().catch(e => {});
-    const sql = "SELECT * From DAILY";
-    const results = await query(conn, sql)
+    const sql_1 = "SELECT MaDaiLy, TenDaiLy, TienNo, SoNoToiDa " +
+                    "From DAILY JOIN LOAIDAILY ON DAILY.MaLoaiDaiLy = LOAIDAILY.MaLoaiDaiLy";
+    const arrayOfDaily = await query(conn, sql_1)
         .catch(e => res.send('Sorry! Something went wrong.'));
-    res.render('xuat_hang/xuat-hang-test', {arrayOfDaily: results});
+
+    const sql_2 = "SELECT MaMatHang, TenMatHang, TenDVT, SoLuongTon, DonGiaNhap " +
+                    "FROM MATHANG JOIN DVT ON MATHANG.MaDVT = DVT.MaDVT";
+    const arrayOfMathang = await query(conn, sql_2)
+        .catch(e => res.send('Sorry! Something went wrong.'));
+
+    res.render('xuat_hang/xuat-hang-test', {arrayOfDaily: arrayOfDaily, arrayOfMathang: arrayOfMathang});
 }));
 
 module.exports = router;

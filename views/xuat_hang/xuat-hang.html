@@ -23,18 +23,21 @@
                     TenMatHang: "test1",
                     DonGiaNhap: "123",
                     TenDVT: "quyen",
+                    SoLuongTon: 100,
                 },
                 {
                     MaMatHang: 2,
                     TenMatHang: "test2",
                     DonGiaNhap: "345",
                     TenDVT: "hop",
+                    SoLuongTon: 100,
                 },
                 {
                     MaMatHang: 3,
                     TenMatHang: "test3",
                     DonGiaNhap: "567",
                     TenDVT: "cai",
+                    SoLuongTon: 100,
                 },
             ];
             var dailys = [
@@ -65,6 +68,10 @@
             '<a class="delete" title=""  data-original-title="Delete"><i class="material-icons">&#xE872;</i></a> \n';
             // Append table with add row form on add new button click
             $(".add-new").click(function(){
+                if (datas.length == 0)
+                {
+                    return alert("khong co hang trong kho");
+                }
                 $(this).attr("disabled", "disabled");
                 var index = $("table tbody tr:last-child").index();
 
@@ -105,6 +112,12 @@
                     var name = datas.filter(data => data.MaMatHang == id)[0].TenMatHang;
                     var donvitinh = datas.filter(data => data.MaMatHang == id)[0].TenDVT;
                     var soluong = $(input[2]).val();
+                    var soluongton = datas.filter(data => data.MaMatHang == id)[0].SoLuongTon;
+                    if (soluongton < soluong)
+                    {
+                        return alert("So luong san co: " + soluongton);
+                    }
+                    datas.filter(data => data.MaMatHang == id)[0].SoLuongTon = soluongton - soluong;
                     var dongia = Math.round(datas.filter(data => data.MaMatHang == id)[0].DonGiaNhap * (TyLeXuat/100));
                     var thanhtien = dongia*soluong;
                     var valuesInput = [id, donvitinh, soluong, dongia, thanhtien];
@@ -136,12 +149,19 @@
             // Delete row on delete button click
             $(document).on("click", ".delete", function(){
                 var td = $(this).parents("tr").find('td');
+                //re-calculate so luong ton kho
+                var inputsoluong = ($(td[2]).find('input[type="hidden"]'))[0];
+                var soluong = parseInt($(inputsoluong).val()) || 0;
+                if (soluong){
+                    var inputid = ($(td[0]).find('input[type="hidden"]'))[0];
+                    datas.filter(data => data.MaMatHang == $(inputid).val())[0].SoLuongTon += soluong;
+                }
+                // re-calculate thanh tien
                 var divthanhtien = ($(td[4]).find("div"))[0];
                 var thanhtien = $(divthanhtien).html() || 0;
                 var tongtien = parseInt($("#tongtien").html()) - thanhtien;
                 $("#tongtien").html(tongtien);
                 $("#inputtongtien").val(tongtien);
-
                 $(this).parents("tr").remove();
                 $(".add-new").removeAttr("disabled");
             });

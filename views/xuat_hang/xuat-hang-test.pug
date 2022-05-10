@@ -13,14 +13,15 @@ head
     link(rel='stylesheet' href='/css/xuat_hang/xuat-hang.css')
     script.
         //get arrayOfDaiLy from pug render:
-        let arrayOfDaily = !{JSON.stringify(arrayOfDaily)};
-        let arrayOfMathang = !{JSON.stringify(arrayOfMathang)};
+        let dailys = !{JSON.stringify(arrayOfDaily)};
+        let datas = !{JSON.stringify(arrayOfMathang)};
+        let TyLeXuat = !{JSON.stringify(TyLeXuat)};
         var canSubmit = true;
         const isCanSubmit = () => canSubmit;
         $(document).ready(function(){
-            var datas = arrayOfMathang;
-            var dailys = arrayOfDaily;
-            var TyLeXuat = 102;
+            // var datas = arrayOfMathang;
+            // var dailys = arrayOfDaily;
+            // var TyLeXuat = TyLeXuat;
             $('[data-toggle="tooltip"]').tooltip();
             var actions = '<a class="add" title=""  data-original-title="Add"><i class="material-icons">&#xE03B;</i></a>' +
                 //'<a class="edit" title=""  data-original-title="Edit"><i class="material-icons">&#xE254;</i></a> \\n' +

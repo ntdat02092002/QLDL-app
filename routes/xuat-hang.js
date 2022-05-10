@@ -25,7 +25,11 @@ router.get('/', basic.check(async (req, res) => {
     const arrayOfMathang = await query(conn, sql_2)
         .catch(e => res.send('Sorry! Something went wrong.'));
 
-    res.render('xuat_hang/xuat-hang-test', {arrayOfDaily: arrayOfDaily, arrayOfMathang: arrayOfMathang});
+    const sql_3 = "SELECT * FROM THAMSO WHERE TenThamSo = ?";
+    const ThamSo = await query(conn, sql_3, ["TyLeXuat"])
+        .catch(e => res.send('Sorry! Something went wrong.'));
+    const TyLeXuat = ThamSo[0].GiaTri;
+    res.render('xuat_hang/xuat-hang-test', {arrayOfDaily: arrayOfDaily, arrayOfMathang: arrayOfMathang, TyLeXuat: TyLeXuat});
 }));
 
 module.exports = router;

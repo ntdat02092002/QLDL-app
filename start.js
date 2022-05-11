@@ -8,7 +8,7 @@ const query = require('./helpers/db-query');
 // });
 async function dbConnect() {
     const conn = await connection()
-        .then(result => console.log("Database connected!"))
+        .then(result => {console.log("Database connected!"); result.end()})
         .catch(e => console.log("Database can't connected!"));
 }
 //test connect database

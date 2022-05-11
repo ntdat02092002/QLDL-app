@@ -29,7 +29,17 @@ router.get('/', basic.check(async (req, res) => {
     const ThamSo = await query(conn, sql_3, ["TyLeXuat"])
         .catch(e => res.send('Sorry! Something went wrong.'));
     const TyLeXuat = ThamSo[0].GiaTri;
+
     res.render('xuat_hang/xuat-hang-test', {arrayOfDaily: arrayOfDaily, arrayOfMathang: arrayOfMathang, TyLeXuat: TyLeXuat});
+}));
+
+router.post('/submit', basic.check(async (req,res) => {
+    const data = req.body;
+    console.log(data);
+    const conn = await connection().catch(e => res.send('Sorry! Something went wrong.'));
+
+    const sql_1 = "";
+
 }));
 
 module.exports = router;

@@ -21,6 +21,8 @@ router.get('/', basic.check(async (req, res) => {
     const results = await query(conn, sql)
         //.then(result => console.log(result))
         .catch(e => res.send('Sorry! Something went wrong.'));
+
+    conn.end();
     res.render('demo/registrations', { title: 'Listing registrations', registrations: results });
 
     /*con.getConnection(function (err, connection) {

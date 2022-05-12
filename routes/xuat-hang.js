@@ -30,12 +30,13 @@ router.get('/', basic.check(async (req, res) => {
         .catch(e => res.send('Sorry! Something went wrong.'));
     const TyLeXuat = ThamSo[0].GiaTri;
 
-    res.render('xuat_hang/xuat-hang-test', {arrayOfDaily: arrayOfDaily, arrayOfMathang: arrayOfMathang, TyLeXuat: TyLeXuat});
+    conn.end();
+    res.render('xuat_hang/xuat-hang', {arrayOfDaily: arrayOfDaily, arrayOfMathang: arrayOfMathang, TyLeXuat: TyLeXuat});
 }));
 
 router.post('/submit', basic.check(async (req,res) => {
     const data = req.body;
-    console.log(data);
+
     const conn = await connection().catch(e => res.send('Sorry! Something went wrong.'));
     const sql_1 = "INSERT INTO PHIEUXUATHANG (MaDaiLy, NgayLapPhieu, TongTien) VALUES ?";
     const value = [[parseInt(data.MaDaiLy), data.NgayLapPhieu, parseInt(data.TongTien)]];
@@ -44,19 +45,24 @@ router.post('/submit', basic.check(async (req,res) => {
     const MaPhieuXuat = result.insertId;
 
     let arrayOfCT_PXH = [];
-    data.MaMatHang.forEach((_, index) => {
-        let MaMatHang = parseInt(data.MaMatHang[index]);
-        let SoLuongXuat = parseInt(data.SoLuong[index]);
-        let DonGiaXuat = parseInt(data.DonGia[index]);
-        let ThanhTien = parseInt(data.ThanhTien[index]);
+    for (let i = 0; i <  data.MaMatHang.length; i++) {
+        let MaMatHang = parseInt(data.MaMatHang[i]);
+        let SoLuongXuat = parseInt(data.SoLuong[i]);
+        let DonGiaXuat = parseInt(data.DonGia[i]);
+        let ThanhTien = parseInt(data.ThanhTien[i]);
         arrayOfCT_PXH.push([MaPhieuXuat, MaMatHang, SoLuongXuat, DonGiaXuat, ThanhTien]);
-    })
-    console.log(arrayOfCT_PXH);
-    const sql_2 = "INSERT INTO CT_PXH (MaPhieuXuat, MaMatHang, SoLuongXuat, DonGiaXuat, ThanhTien) VALUES ?";
-    const result_2 = await query(conn, sql_2, [arrayOfCT_PXH])
-        .catch(e => {res.send('Sorry! Something went wrong.'); console.log(e)});
-    res.send("ok");
 
+        const sql_2 = "UPDATE MATHANG SET SoLuongTon = SoLuongTon - ? WHERE MaMatHang = ?";
+        await query(conn, sql_2, [SoLuongXuat, MaMatHang])
+            .catch(e => {res.send('Sorry! Something went wrong.'); console.log(e)});
+    }
+
+    const sql_3 = "INSERT INTO CT_PXH (MaPhieuXuat, MaMatHang, SoLuongXuat, DonGiaXuat, ThanhTien) VALUES ?";
+    await query(conn, sql_3, [arrayOfCT_PXH])
+        .catch(e => {res.send('Sorry! Something went wrong.'); console.log(e)});
+
+    conn.end();
+    res.render("xuat_hang/xuat-hang-submitted");
 }));
 
 module.exports = router;

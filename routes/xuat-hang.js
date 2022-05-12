@@ -36,7 +36,7 @@ router.get('/', basic.check(async (req, res) => {
 
 router.post('/submit', basic.check(async (req,res) => {
     const data = req.body;
-
+    console.log(data);
     const conn = await connection().catch(e => res.send('Sorry! Something went wrong.'));
     const sql_1 = "INSERT INTO PHIEUXUATHANG (MaDaiLy, NgayLapPhieu, TongTien) VALUES ?";
     const value = [[parseInt(data.MaDaiLy), data.NgayLapPhieu, parseInt(data.TongTien)]];
@@ -59,6 +59,10 @@ router.post('/submit', basic.check(async (req,res) => {
 
     const sql_3 = "INSERT INTO CT_PXH (MaPhieuXuat, MaMatHang, SoLuongXuat, DonGiaXuat, ThanhTien) VALUES ?";
     await query(conn, sql_3, [arrayOfCT_PXH])
+        .catch(e => {res.send('Sorry! Something went wrong.'); console.log(e)});
+
+    const sql_4 = "UPDATE DAILY SET TienNo = TienNo + ? WHERE MaDaiLy = ?";
+    await query(conn, sql_4, [parseInt(data.ConLai), parseInt(data.MaDaiLy)])
         .catch(e => {res.send('Sorry! Something went wrong.'); console.log(e)});
 
     conn.end();

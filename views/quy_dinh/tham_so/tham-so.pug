@@ -1,0 +1,51 @@
+doctype html
+head
+    meta(charset='utf-8')
+    meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
+    title Thay &dstrok;&#x1ED5;i tham s&#x1ED1;
+    link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto|Varela+Round|Open+Sans')
+    link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css')
+    link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css')
+    link(rel='stylesheet' href='/css/quy_dinh/tham-so.css')
+.container-lg
+    .table-responsive
+        form(action='/quy-dinh/tham-so' method='post')
+            .table-wrapper
+                .table-title
+                    .row
+                        .col-sm-2
+                            a.goback(href='/quy-dinh')
+                                i.fa.fa-chevron-circle-left.fa-3x(aria-hidden='true')
+                        .col-sm-8.text-center
+                            h1 Thay &dstrok;&#x1ED5;i tham s&#x1ED1;
+                .table-title
+                    .row
+                        .col-sm-8
+                            h2 S&#x1ED1; &dstrok;&#x1EA1;i l&yacute; t&#x1ED1;i &dstrok;a trong 1 qu&#x1EAD;n:
+                        .col-sm-4
+                            input.form-control(type='text' name='DaiLyToiDaMoiQuan' required value=DaiLyToiDaMoiQuan oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*?)\\..*/g, '$1');")
+                .table-title
+                    .row
+                        .col-sm-8
+                            h2 Cho ph&eacute;p thu ti&#x1EC1;n v&#x1B0;&#x1EE3;t ti&#x1EC1;n n&#x1EE3;:
+                        .col-sm-4
+                            select.form-control(name='ThuVuotNo' selected=ThuVuotNo)
+                                if ThuVuotNo
+                                    option(value=0) False
+                                    option(value=1 selected) True
+                                else
+                                    option(value=0 selected) False
+                                    option(value=1) True
+                            // <input type="text" class="form-control" name="ThuVuotNo" value=0 oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                .table-title
+                    .row
+                        .col-sm-8
+                            h2 T&#x1EF7; l&#x1EC7; &dstrok;&#x1A1;n gi&aacute; xu&#x1EA5;t (%):
+                        .col-sm-4
+                            input.form-control(type='text' name='TyLeXuat' required value=TyLeXuat oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*?)\\..*/g, '$1');")
+                .table-title
+                    .row
+                        .col-sm-8
+                        .col-sm-2
+                        .col-sm-2
+                            button#submit.btn.btn-primary(type='submit' onclick='return confirm("are you sure?")') submit

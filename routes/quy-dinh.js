@@ -17,6 +17,7 @@ router.get('/', basic.check((req, res) => {
     res.render('quy_dinh/quy-dinh');
 }));
 
+//tham so
 router.get('/tham-so', basic.check(async (req, res) => {
     const conn = await connection().catch(e => {});
     const sql = "SELECT * FROM THAMSO"
@@ -52,6 +53,7 @@ router.post('/tham-so', basic.check(async (req, res) => {
     res.render("quy_dinh/tham_so/tham-so-submitted");
 }));
 
+//loai dai ly
 router.get('/loai-dai-ly', basic.check(async (req, res) => {
     const conn = await connection().catch(e => {});
     const sql = "SELECT * FROM LOAIDAILY"
@@ -122,4 +124,74 @@ router.get('/loai-dai-ly/delete/:id', basic.check(async (req, res) => {
     res.redirect('/quy-dinh/loai-dai-ly');
 }));
 
+//don vi tinh
+router.get('/don-vi-tinh', basic.check(async (req, res) => {
+    const conn = await connection().catch(e => {});
+    const sql = "SELECT * FROM DVT"
+    const DbResponse = await query(conn, sql)
+        .catch(e => res.send('Sorry! Something went wrong.'));
+    conn.end();
+    res.render('quy_dinh/don_vi_tinh/danh-sach', {ArrayOfDonViTinh: DbResponse});
+}));
+
+router.get('/don-vi-tinh/edit/:id', basic.check(async (req, res) => {
+    const id = req.params.id;
+
+    const conn = await connection().catch(e => {});
+    const sql = "SELECT * FROM DVT WHERE MaDVT = ?"
+    const DbResponse = await query(conn, sql, id)
+        .catch(e => res.send('Sorry! Something went wrong.'));
+    conn.end();
+    if (DbResponse.length <= 0)
+        res.send('Sorry! Something went wrong.');
+    else
+        res.render('quy_dinh/don_vi_tinh/form', {
+            data: DbResponse[0],
+            title: "Chỉnh sửa đơn vị tính",
+            action: '/quy-dinh/don-vi-tinh/edit/' + id,
+        });
+}));
+
+router.post('/don-vi-tinh/edit/:id', basic.check(async (req, res) => {
+    const data = req.body;
+    const id = req.params.id;
+
+    const conn = await connection().catch(e => {});
+    const sql = "UPDATE DVT SET TenDVT = ? WHERE MaDVT = ? "
+    await query(conn, sql, [data.TenDVT, id])
+        .catch(e => res.send('Sorry! Something went wrong.'));
+    conn.end();
+    res.redirect('/quy-dinh/don-vi-tinh');
+}));
+
+router.get('/don-vi-tinh/create', basic.check(async (req, res) => {
+    res.render('quy_dinh/don_vi_tinh/form', {
+        title: "Thêm đơn vị tính mới",
+    });
+}));
+
+router.post('/don-vi-tinh/create', basic.check(async (req, res) => {
+    const data = req.body;
+
+    const conn = await connection().catch(e => {});
+    const sql = "INSERT INTO DVT (TenDVT) VALUES ?"
+    const value = [
+        [data.TenDVT]
+    ];
+    await query(conn, sql, [value])
+        .catch(e => res.send('Sorry! Something went wrong.'));
+    conn.end();
+    res.redirect('/quy-dinh/don-vi-tinh');
+}));
+
+router.get('/don-vi-tinh/delete/:id', basic.check(async (req, res) => {
+    const id = req.params.id;
+
+    const conn = await connection().catch(e => {});
+    const sql = "DELETE FROM DVT WHERE MaDVT = ?"
+    await query(conn, sql, id)
+        .catch(e => res.send('Sorry! Something went wrong.'));
+    conn.end();
+    res.redirect('/quy-dinh/don-vi-tinh');
+}));
 module.exports = router;

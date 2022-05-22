@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Thay đổi tham số</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round|Open+Sans">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../../public/css/quy_dinh/tham-so.css">
+</head>
+<body>
+<div class="container-lg">
+    <div class="table-responsive">
+        <form action="/quy-dinh/tham-so" method="post">
+            <div class="table-wrapper">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <a href="/quy-dinh" class="goback"><i class="fa fa-chevron-circle-left fa-3x" aria-hidden="true"></i></a>
+                        </div>
+                        <div class="col-sm-8 text-center"><h1>Thay đổi tham số</h1></div>
+                    </div>
+                </div>
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <h2>Số đại lý tối đa trong 1 quận:</h2>
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" name="DaiLyToiDaMoiQuan" required value=0 oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                        </div>
+                    </div>
+                </div>
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <h2>Cho phép thu tiền vượt tiền nợ:</h2>
+                        </div>
+                        <div class="col-sm-4">
+                            <select class="form-control" name="ThuVuotNo" selected=0>
+                                <option value=0>False</option>
+                                <option value=1>True</option>
+                            </select>
+                            <!--<input type="text" class="form-control" name="ThuVuotNo" value=0 oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">-->
+                        </div>
+                    </div>
+                </div>
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <h2>Tỷ lệ đơn giá xuất (%):</h2>
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" name="TyLeXuat" required value="0" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                        </div>
+                    </div>
+                </div>
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-8"></div>
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-2">
+                            <button type="submit" class="btn btn-primary" id="submit" onclick='return confirm("are you sure?")'>submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

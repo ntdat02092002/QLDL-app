@@ -11,9 +11,12 @@
     width:100%;
 }
 
-h1{
-    font-size:100px;
+h2{
+    font-size:70px;
     font-weight: bold;
     border-bottom: 5px solid blue;
     padding-bottom: 10px;
+}
+.goback {
+    color: #4684ab;
 }

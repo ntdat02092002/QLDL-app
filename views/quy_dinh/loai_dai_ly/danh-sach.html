@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Loại đại lý</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round|Open+Sans">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../../../public/css/quy_dinh/loai-dai-ly.css">
+</head>
+<body>
+<div class="container-lg">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <a href="/quy-dinh" class="goback"><i class="fa fa-chevron-circle-left fa-3x" aria-hidden="true"></i></a>
+                    </div>
+                    <div class="col-sm-8 text-center"><h1>Danh sách loại đại lý</h1></div>
+                </div>
+            </div>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Tên loại đại lý</th>
+                    <th>Số nợ tối đa</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>123</td>
+                    <td>4124412</td>
+                    <td>
+                        <a class="edit" href="/"><i class="material-icons">&#xE254;</i></a>
+                        <a class="delete" href="/" onclick='return confirm("are you sure?")'><i class="material-icons">&#xE872;</i></a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-12 align-self-end">
+                        <a href="/quy-dinh/loai-dai-ly/create">
+                            <button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Thêm loại đại lý mới</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

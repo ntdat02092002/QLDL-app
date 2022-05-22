@@ -1,0 +1,45 @@
+doctype html
+head
+    meta(charset='utf-8')
+    meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
+    title Lo&#x1EA1;i &dstrok;&#x1EA1;i l&yacute;
+    link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto|Varela+Round|Open+Sans')
+    link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css')
+    link(rel='stylesheet' href='https://fonts.googleapis.com/icon?family=Material+Icons')
+    link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css')
+    script(src='https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js')
+    script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js')
+    link(rel='stylesheet' href='/css/quy_dinh/loai-dai-ly.css')
+.container-lg
+    .table-responsive
+        .table-wrapper
+            .table-title
+                .row
+                    .col-sm-2
+                        a.goback(href='/quy-dinh')
+                            i.fa.fa-chevron-circle-left.fa-3x(aria-hidden='true')
+                    .col-sm-8.text-center
+                        h1 Danh s&aacute;ch lo&#x1EA1;i &dstrok;&#x1EA1;i l&yacute;
+            table.table.table-bordered
+                thead
+                    tr
+                        th T&ecirc;n lo&#x1EA1;i &dstrok;&#x1EA1;i l&yacute;
+                        th S&#x1ED1; n&#x1EE3; t&#x1ED1;i &dstrok;a
+                        th Action
+                tbody
+                    each LoaiDaiLy in ArrayOfLoaiDaiLy
+                        tr
+                            td= LoaiDaiLy.TenLoaiDaiLy
+                            td= LoaiDaiLy.SoNoToiDa
+                            td
+                                a.edit(href=`/quy-dinh/loai-dai-ly/edit/${LoaiDaiLy.MaLoaiDaiLy}`)
+                                    i.material-icons &#xE254;
+                                a.delete(href=`/quy-dinh/loai-dai-ly/delete/${LoaiDaiLy.MaLoaiDaiLy}` onclick='return confirm("are you sure?")')
+                                    i.material-icons &#xE872;
+            .table-title
+                .row
+                    .col-sm-12.align-self-end
+                        a(href='/quy-dinh/loai-dai-ly/create')
+                            button.btn.btn-info.add-new(type='button')
+                                i.fa.fa-plus
+                                |  Th&ecirc;m lo&#x1EA1;i &dstrok;&#x1EA1;i l&yacute; m&#x1EDB;i

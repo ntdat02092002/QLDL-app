@@ -1,0 +1,42 @@
+-data = data || {}
+-action = action || "/quy-dinh/loai-dai-ly/create"
+
+doctype html
+head
+    meta(charset='utf-8')
+    meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
+    title= `${title}`
+    link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto|Varela+Round|Open+Sans')
+    link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css')
+    link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css')
+    link(rel='stylesheet' href='/css/quy_dinh/loai-dai-ly.css')
+
+.container-lg
+    .table-responsive
+        form(action=`${action}` method='post')
+            .table-wrapper
+                .table-title
+                    .row
+                        .col-sm-2
+                            a.goback(href='/quy-dinh/loai-dai-ly')
+                                i.fa.fa-chevron-circle-left.fa-3x(aria-hidden='true')
+                        .col-sm-8.text-center
+                            h1= `${title}`
+                .table-title
+                    .row
+                        .col-sm-4
+                            h2 T&ecirc;n lo&#x1EA1;i &dstrok;&#x1EA1;i l&yacute;:
+                        .col-sm-8
+                            input.form-control(type='text' name='TenLoaiDaiLy' required='' value=data.TenLoaiDaiLy)
+                .table-title
+                    .row
+                        .col-sm-4
+                            h2 S&#x1ED1; n&#x1EE3; t&#x1ED1;i &dstrok;a:
+                        .col-sm-8
+                            input.form-control(type='text' name='SoNoToiDa' required='' value=data.SoNoToiDa oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*?)\\..*/g, '$1');")
+                .table-title
+                    .row
+                        .col-sm-8
+                        .col-sm-2
+                        .col-sm-2
+                            button#submit.btn.btn-primary(type='submit' onclick='return confirm("are you sure?")') submit

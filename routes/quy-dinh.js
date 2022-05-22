@@ -52,4 +52,74 @@ router.post('/tham-so', basic.check(async (req, res) => {
     res.render("quy_dinh/tham_so/tham-so-submitted");
 }));
 
+router.get('/loai-dai-ly', basic.check(async (req, res) => {
+    const conn = await connection().catch(e => {});
+    const sql = "SELECT * FROM LOAIDAILY"
+    const DbResponse = await query(conn, sql)
+        .catch(e => res.send('Sorry! Something went wrong.'));
+    conn.end();
+    res.render('quy_dinh/loai_dai_ly/danh-sach', {ArrayOfLoaiDaiLy: DbResponse});
+}));
+
+router.get('/loai-dai-ly/edit/:id', basic.check(async (req, res) => {
+    const id = req.params.id;
+
+    const conn = await connection().catch(e => {});
+    const sql = "SELECT * FROM LOAIDAILY WHERE MaLoaiDaiLy = ?"
+    const DbResponse = await query(conn, sql, id)
+        .catch(e => res.send('Sorry! Something went wrong.'));
+    conn.end();
+    if (DbResponse.length <= 0)
+        res.send('Sorry! Something went wrong.');
+    else
+        res.render('quy_dinh/loai_dai_ly/form', {
+            data: DbResponse[0],
+            title: "Chỉnh sửa loại đại lý",
+            action: '/quy-dinh/loai-dai-ly/edit/' + id,
+        });
+}));
+
+router.post('/loai-dai-ly/edit/:id', basic.check(async (req, res) => {
+    const data = req.body;
+    const id = req.params.id;
+
+    const conn = await connection().catch(e => {});
+    const sql = "UPDATE LOAIDAILY SET TenLoaiDaiLy = ?, SoNoToiDa = ? WHERE MaLoaiDaiLy = ? "
+    await query(conn, sql, [data.TenLoaiDaiLy, parseInt(data.SoNoToiDa), id])
+        .catch(e => res.send('Sorry! Something went wrong.'));
+    conn.end();
+    res.redirect('/quy-dinh/loai-dai-ly');
+}));
+
+router.get('/loai-dai-ly/create', basic.check(async (req, res) => {
+    res.render('quy_dinh/loai_dai_ly/form', {
+        title: "Thêm loại đại lý mới",
+    });
+}));
+
+router.post('/loai-dai-ly/create', basic.check(async (req, res) => {
+    const data = req.body;
+
+    const conn = await connection().catch(e => {});
+    const sql = "INSERT INTO LOAIDAILY (TenLoaiDaiLy, SoNoToiDa) VALUES ?"
+    const value = [
+        [data.TenLoaiDaiLy, parseInt(data.SoNoToiDa)]
+    ];
+    await query(conn, sql, [value])
+        .catch(e => res.send('Sorry! Something went wrong.'));
+    conn.end();
+    res.redirect('/quy-dinh/loai-dai-ly');
+}));
+
+router.get('/loai-dai-ly/delete/:id', basic.check(async (req, res) => {
+    const id = req.params.id;
+
+    const conn = await connection().catch(e => {});
+    const sql = "DELETE FROM LOAIDAILY WHERE MaLoaiDaiLy = ?"
+    await query(conn, sql, id)
+        .catch(e => res.send('Sorry! Something went wrong.'));
+    conn.end();
+    res.redirect('/quy-dinh/loai-dai-ly');
+}));
+
 module.exports = router;

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Thêm loại đại lý</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round|Open+Sans">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../../public/css/quy_dinh/loai-dai-ly.css">
+</head>
+<body>
+<div class="container-lg">
+    <div class="table-responsive">
+        <form action="/quy-dinh/loai-dai-ly/create" method="post">
+            <div class="table-wrapper">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <a href="/quy-dinh/loai-dai-ly" class="goback"><i class="fa fa-chevron-circle-left fa-3x" aria-hidden="true"></i></a>
+                        </div>
+                        <div class="col-sm-8 text-center"><h1>Thêm loại đại lý mới</h1></div>
+                    </div>
+                </div>
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <h2>Tên loại đại lý:</h2>
+                        </div>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="TenLoaiDaiLy" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <h2>Số nợ tối đa:</h2>
+                        </div>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="SoNoToiDa" required value="0" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                        </div>
+                    </div>
+                </div>
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-8"></div>
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-2">
+                            <button type="submit" class="btn btn-primary" id="submit" onclick='return confirm("are you sure?")'>submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

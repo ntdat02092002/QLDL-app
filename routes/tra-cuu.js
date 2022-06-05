@@ -19,13 +19,6 @@ router.get('/', basic.check(async(req, res, next) => {
         .catch(e => res.send('Sorry! Something went wrong.'));
 
     conn.end();
-    
-    /*var total = 0;
-    dataDaiLy.forEach(function(data){
-        total += data.TienNo;
-    })
-    console.log(total);*/
-
     res.render('tra_cuu/tra_cuu.ejs', {userData: dataDaiLy});
 }));
 

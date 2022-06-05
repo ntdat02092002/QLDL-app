@@ -31,7 +31,7 @@ router.get('/', basic.check(async (req, res) => {
     const TyLeXuat = ThamSo[0].GiaTri;
 
     conn.end();
-    res.render('xuat_hang/xuat-hang', {arrayOfDaily: arrayOfDaily, arrayOfMathang: arrayOfMathang, TyLeXuat: TyLeXuat});
+    res.render('xuat_hang/xuat-hang.pug', {arrayOfDaily: arrayOfDaily, arrayOfMathang: arrayOfMathang, TyLeXuat: TyLeXuat});
 }));
 
 router.post('/submit', basic.check(async (req,res) => {
@@ -66,7 +66,7 @@ router.post('/submit', basic.check(async (req,res) => {
         .catch(e => {res.send('Sorry! Something went wrong.'); console.log(e)});
 
     conn.end();
-    res.render("xuat_hang/xuat-hang-submitted");
+    res.render("xuat_hang/xuat-hang-submitted.pug");
 }));
 
 module.exports = router;

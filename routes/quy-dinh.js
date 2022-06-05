@@ -14,7 +14,7 @@ const basic = auth.basic({
 
 router.get('/', basic.check((req, res) => {
 
-    res.render('quy_dinh/quy-dinh');
+    res.render('quy_dinh/quy-dinh.pug');
 }));
 
 //tham so
@@ -29,7 +29,7 @@ router.get('/tham-so', basic.check(async (req, res) => {
     const ThuVuotNo = DbResponse.filter(data => data.TenThamSo === "ThuVuotNo")[0].GiaTri;
 
     conn.end();
-    res.render('quy_dinh/tham_so/tham-so', {TyLeXuat: TyLeXuat, DaiLyToiDaMoiQuan: DaiLyToiDaMoiQuan, ThuVuotNo:ThuVuotNo});
+    res.render('quy_dinh/tham_so/tham-so.pug', {TyLeXuat: TyLeXuat, DaiLyToiDaMoiQuan: DaiLyToiDaMoiQuan, ThuVuotNo:ThuVuotNo});
 }));
 
 router.post('/tham-so', basic.check(async (req, res) => {
@@ -50,7 +50,7 @@ router.post('/tham-so', basic.check(async (req, res) => {
     }
     conn.end();
 
-    res.render("quy_dinh/tham_so/tham-so-submitted");
+    res.render("quy_dinh/tham_so/tham-so-submitted.pug");
 }));
 
 //loai dai ly
@@ -60,7 +60,7 @@ router.get('/loai-dai-ly', basic.check(async (req, res) => {
     const DbResponse = await query(conn, sql)
         .catch(e => res.send('Sorry! Something went wrong.'));
     conn.end();
-    res.render('quy_dinh/loai_dai_ly/danh-sach', {ArrayOfLoaiDaiLy: DbResponse});
+    res.render('quy_dinh/loai_dai_ly/danh-sach.pug', {ArrayOfLoaiDaiLy: DbResponse});
 }));
 
 router.get('/loai-dai-ly/edit/:id', basic.check(async (req, res) => {
@@ -74,7 +74,7 @@ router.get('/loai-dai-ly/edit/:id', basic.check(async (req, res) => {
     if (DbResponse.length <= 0)
         res.send('Sorry! Something went wrong.');
     else
-        res.render('quy_dinh/loai_dai_ly/form', {
+        res.render('quy_dinh/loai_dai_ly/form.pug', {
             data: DbResponse[0],
             title: "Chỉnh sửa loại đại lý",
             action: '/quy-dinh/loai-dai-ly/edit/' + id,
@@ -94,7 +94,7 @@ router.post('/loai-dai-ly/edit/:id', basic.check(async (req, res) => {
 }));
 
 router.get('/loai-dai-ly/create', basic.check(async (req, res) => {
-    res.render('quy_dinh/loai_dai_ly/form', {
+    res.render('quy_dinh/loai_dai_ly/form.pug', {
         title: "Thêm loại đại lý mới",
     });
 }));
@@ -131,7 +131,7 @@ router.get('/don-vi-tinh', basic.check(async (req, res) => {
     const DbResponse = await query(conn, sql)
         .catch(e => res.send('Sorry! Something went wrong.'));
     conn.end();
-    res.render('quy_dinh/don_vi_tinh/danh-sach', {ArrayOfDonViTinh: DbResponse});
+    res.render('quy_dinh/don_vi_tinh/danh-sach.pug', {ArrayOfDonViTinh: DbResponse});
 }));
 
 router.get('/don-vi-tinh/edit/:id', basic.check(async (req, res) => {
@@ -145,7 +145,7 @@ router.get('/don-vi-tinh/edit/:id', basic.check(async (req, res) => {
     if (DbResponse.length <= 0)
         res.send('Sorry! Something went wrong.');
     else
-        res.render('quy_dinh/don_vi_tinh/form', {
+        res.render('quy_dinh/don_vi_tinh/form.pug', {
             data: DbResponse[0],
             title: "Chỉnh sửa đơn vị tính",
             action: '/quy-dinh/don-vi-tinh/edit/' + id,
@@ -165,7 +165,7 @@ router.post('/don-vi-tinh/edit/:id', basic.check(async (req, res) => {
 }));
 
 router.get('/don-vi-tinh/create', basic.check(async (req, res) => {
-    res.render('quy_dinh/don_vi_tinh/form', {
+    res.render('quy_dinh/don_vi_tinh/form.pug', {
         title: "Thêm đơn vị tính mới",
     });
 }));

@@ -38,8 +38,8 @@ router.post('/submit', basic.check(async (req,res) => {
     const data = req.body;
     console.log(data);
     const conn = await connection().catch(e => res.send('Sorry! Something went wrong.'));
-    const sql_1 = "INSERT INTO PHIEUXUATHANG (MaDaiLy, NgayLapPhieu, TongTien) VALUES ?";
-    const value = [[parseInt(data.MaDaiLy), data.NgayLapPhieu, parseInt(data.TongTien)]];
+    const sql_1 = "INSERT INTO PHIEUXUATHANG (MaDaiLy, NgayLapPhieu, TongTien, SoTienTra) VALUES ?";
+    const value = [[parseInt(data.MaDaiLy), data.NgayLapPhieu, parseInt(data.TongTien), parseInt(data.SoTienTra)]];
     const result = await query(conn, sql_1, [value])
         .catch(e => res.send('Sorry! Something went wrong.'));
     const MaPhieuXuat = result.insertId;

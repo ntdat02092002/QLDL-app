@@ -35,6 +35,7 @@
 						if(userData.length!=0){
 						var i=1;
 						userData.forEach(function(data){
+							console.log(data.TenDaiLy);
 						%>
 						<tr>
 							<td><%=data.MaDaiLy %></td>
@@ -47,7 +48,7 @@
 						<%  i++; }) %>
 						<% } else{ %>
 							<tr>
-								<td colspan="7">No Data Found</td>
+								<td colspan="7">Không tìm thấy đại lý</td>
 							</tr>
 						<% } %>
 					</tbody>

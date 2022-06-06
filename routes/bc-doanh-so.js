@@ -32,7 +32,7 @@ router.get('/doanh-so', basic.check(async(req, res) => {
 
     if (datatendaily.length == 0){
         
-        res.render('doanh_so/doanh_so_kp.ejs',{userData: datatendaily});
+        res.render('doanh_so/doanh_so_kq.ejs',{userData: datatendaily});
     }
     
     var begindate;
@@ -104,6 +104,8 @@ router.get('/doanh-so', basic.check(async(req, res) => {
     })
     TyLe=ThamSo;
 
+    var querymonth = querydate.substr(5,7);
+    var queryyear = querydate.substr(0,4);
     res.render('doanh_so/doanh_so_kq.ejs',{userData: datatendaily, TenDaiLy: key, SoPhieuThu: SoPhieuThu, TongTriGia: TongTriGia, TyLe: TyLe, querymonth: querymonth, queryyear: queryyear});
     
 }))

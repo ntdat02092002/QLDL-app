@@ -23,7 +23,7 @@ router.get('/', basic.check(async (req, res) => {
         .catch(e => res.send('Sorry! Something went wrong.'));
 
     conn.end();
-    res.render('demo/registrations', { title: 'Listing registrations', registrations: results });
+    res.render('demo/registrations.pug', { title: 'Listing registrations', registrations: results });
 
     /*con.getConnection(function (err, connection) {
         connection.query(sql, function (err, registrations) {
@@ -39,7 +39,7 @@ router.get('/', basic.check(async (req, res) => {
 //route for create new daily
 
 router.get('/create', basic.check((req, res) => {
-    res.render('demo/form', { title: 'Registration form'});
+    res.render('demo/form.pug', { title: 'Registration form'});
 }));
 
 router.post('/create',
@@ -72,7 +72,7 @@ router.post('/create',
                 });
             });
 
-            res.render('demo/form-submitted', {
+            res.render('demo/form-submitted.pug', {
                 title: 'Registration success',
             });
         } else {

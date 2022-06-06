@@ -16,9 +16,10 @@ router.get('/', basic.check((req, res, next) => {
     res.render('cong_no/search.ejs');
 }));
 
-router.get('/cong-no', basic.check(async(req, res, next) => {
+router.get('/cong-no', basic.check(async(req, res) => {
     const key = req.query.search_bar;
     const querydate = req.query.month;
+    console.log('query date: ' + querydate);
 
     const conn = await connection().catch(e => {});
 
@@ -117,8 +118,10 @@ router.get('/cong-no', basic.check(async(req, res, next) => {
 
     console.log('TenDaiLy: ', key, 'NoDau: ', NoDau, 'NoCuoi: ', NoCuoi, 'NoPhatSinh: ', NoPhatSinh, 'tienthucuoi: ', tienthucuoi, 'tienthudau: ', tienthudau);
     
-
-    res.render('cong_no/cong_no.ejs',{userData: datatendaily, TenDaiLy: key, NoDau: NoDau, NoCuoi: NoCuoi, NoPhatSinh: NoPhatSinh});
+    var querymonth = querydate.substr(5,7);
+    var queryyear = querydate.substr(0,4);
+    res.render('cong_no/cong_no.ejs',{userData: datatendaily, TenDaiLy: key, NoDau: NoDau, NoCuoi: NoCuoi
+        , NoPhatSinh: NoPhatSinh, querymonth: querymonth, queryyear: queryyear});
     
 }))
 

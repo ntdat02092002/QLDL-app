@@ -1,0 +1,136 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    |     
+    meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+    |     
+    title Phi&#x1EBF;u xu&#x1EA5;t h&agrave;ng
+    |     
+    link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Roboto|Varela+Round|Open+Sans')
+    |     
+    link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css')
+    |     
+    link(rel='stylesheet', href='https://fonts.googleapis.com/icon?family=Material+Icons')
+    |     
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css')
+    |     
+    script(src='https://code.jquery.com/jquery-3.5.1.min.js')
+    |     
+    script(src='https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js')
+    |     
+    script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js')
+    |     
+    link(rel='stylesheet', href='/css/thu_tien/thu-tien.css')
+    |     
+    script.
+        let dailys = !{JSON.stringify(arrayOfDaily)};
+        // let ThuVuotNo = !{JSON.stringify(ThuVuotNo)};
+        let ThuVuotNo = false;
+        var canSubmit = true;
+        const isCanSubmit = () => canSubmit;
+        $(document).ready(function(){
+            //set select box of tendaily
+            var option = '';
+            $.each(dailys, function(i, data) {
+                option += '<option value="'+data.MaDaiLy +'">'+data.TenDaiLy+'</option>';
+            });
+            $('.tendaily').html(
+                '<select class="form-control" name="MaDaiLy" id="madaily" > ' +
+                option +
+                '</select>'
+            );
+            //set default day
+            var now = new Date();
+            var month = (now.getMonth() + 1);
+            var day = now.getDate();
+            if (month < 10)
+                month = "0" + month;
+            if (day < 10)
+                day = "0" + day;
+            var today = now.getFullYear() + '-' + month + '-' + day;
+            $('.ngaylapphieu').val(today);   
+        
+            $(document).on("click", ".TienNo", function(){
+                var iddaily = $("#madaily").val();
+                var daily = dailys.filter(data => data.MaDaiLy == iddaily)[0];
+                var tienno = daily.TienNo;
+                $("#TienNo").html("Tiền nợ: " + tienno);
+            });
+
+            const check = () => {
+                var iddaily = $("#madaily").val();
+                var daily = dailys.filter(data => data.MaDaiLy == iddaily)[0];
+                var tienno = daily.TienNo;
+                var tienthu = $("#amountmoney").val();
+                if (!ThuVuotNo)
+                    if (tienthu > tienno) {
+                        alert("Khong cho phep tien thu lon hon tien no!!");
+                        canSubmit = false;
+                    }
+                    else {
+                        canSubmit = true;
+                    }
+                return canSubmit;
+            }
+            $(document).on("click", "#submit", function () {
+                if(check()) return confirm("are you sure?");
+                else return false;
+            });
+        });
+  body
+    #wrapper
+      .container
+        div
+          .row.justify-content-around
+            form.col-md-6.bg-secondary.p-3.mb-3.text-white(action='/thu-tien/phieu-thu', method='post')
+              h1.text-center.text-uppercase.h3 PHI&#x1EBE;U THU TI&#x1EC0;N
+              |  
+              |           
+              .row
+                .col
+                  label(for='tendaily') &Dstrok;&#x1EA1;i l&yacute;
+                  |               
+                  #tendaily.tendaily
+                |  
+                |             
+                .col
+                  label(for='date') Ng&agrave;y l&#x1EAD;p phi&#x1EBF;u
+                  |             &#x9;
+                  input#date.form-control.ngaylapphieu(type='date', name='NgayLapPhieu')
+              |     
+              |           
+              .row
+                .col
+                  label(for='email') Email
+                  |               
+                  input#email.form-control(type='email', name='email', placeholder='Email', required='')
+                |             
+                .col
+                  label(for='phonenumber') S&#x1ED1; &dstrok;i&#x1EC7;n tho&#x1EA1;i
+                  |               
+                  input#phonenumber.form-control(type='text', name='phonenumber', placeholder='0123456789', oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*?)\\..*/g, '$1');", required='')
+              |           
+              .row
+                .col
+                  label(for='address') &Dstrok;&#x1ECB;a ch&#x1EC9;
+                  |               
+                  input#address.form-control(type='address', name='address', placeholder='Địa chỉ')
+              |
+              .form-group
+                label(for='TienThu') S&#x1ED1; ti&#x1EC1;n thu
+                |             
+                input#amountmoney.form-control(type='text', name='TienThu', placeholder='Số tiền(vnd)', oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*?)\\..*/g, '$1');", required='')
+              |
+              .form-group
+                  .container
+                      .row
+                        button.btn.btn-danger.col-sm-2.TienNo(type='button' ) Xem n&#x1EE3;
+                        #TienNo.col.align-items-center.align-self-center
+              |
+              .d-grid
+                button#submit.btn.btn-primary.btn-block(type='submit') L&#x1B0;u
+
+
+
+

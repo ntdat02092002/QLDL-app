@@ -44,12 +44,20 @@ router.get('/doanh-so', basic.check(async(req, res) => {
     console.log('NgayTiepNhan: ',begindate);
     var querydate2 = querydate + '-31';
     console.log('end of querys month: ', querydate2);
+
     const endmonth='SELECT TienThu FROM PHIEUTHUTIEN, DAILY ' +
     'WHERE PHIEUTHUTIEN.MaDaiLy = DAILY.MaDaiLy AND TenDaiLy = ? AND NgayLapPhieu >= ? AND NgayLapPhieu <= ?';
     const dataendmonth = await query(conn, endmonth, [key, begindate, querydate2])
         .catch(e => res.send('Sorry! Something went wrong.'));
 
     console.log('query of tien no cuoi thang: ', dataendmonth);
+
+    const endmonth_2='SELECT TienThu FROM PHIEUTHUTIEN, DAILY ' +
+    'WHERE PHIEUTHUTIEN.MaDaiLy = DAILY.MaDaiLy AND NgayLapPhieu >= ? AND NgayLapPhieu <= ?';
+    const dataendmonth_2 = await query(conn, endmonth_2, [begindate, querydate2])
+        .catch(e => res.send('Sorry! Something went wrong.'));
+
+    console.log('query of tien thu cuoi thang: ', dataendmonth_2);
     
     let tmp = querydate.substr(5,7);
     let lastmonth;
@@ -71,6 +79,14 @@ router.get('/doanh-so', basic.check(async(req, res) => {
 
     console.log('query of no dau thang: ', datebeginmonth);
 
+    const beginmonth_2 = 'SELECT TienThu FROM PHIEUTHUTIEN, DAILY ' +
+    'WHERE PHIEUTHUTIEN.MaDaiLy = DAILY.MaDaiLy AND NgayLapPhieu >= ? AND NgayLapPhieu <= ?';
+    const datebeginmonth_2 = await query(conn, beginmonth_2, [begindate, lastmonth])
+        .catch(e => res.send('Sorry! Something went wrong.'));
+
+
+    console.log('query of thu dau thang: ', datebeginmonth_2);
+
     const paymonth = 'SELECT TienThu FROM PHIEUTHUTIEN, DAILY ' +
     'WHERE PHIEUTHUTIEN.MaDaiLy = DAILY.MaDaiLy AND TenDaiLy = ? AND NgayLapPhieu >= ? AND NgayLapPhieu <= ?';
     const datapayendmonth = await query(conn, paymonth, [key, lastmonth, querydate2])
@@ -83,13 +99,23 @@ router.get('/doanh-so', basic.check(async(req, res) => {
 
     console.log('query of tien thu dau: ', datapaybeginmonth);
 
-    const sqlthamso = "SELECT * FROM THAMSO WHERE TenThamSo = ?";
-    const ThamSo = await query(conn, sqlthamso, ["TyLeXuat"])
+    const paymonth_2 = 'SELECT TienThu FROM PHIEUTHUTIEN, DAILY ' +
+    'WHERE PHIEUTHUTIEN.MaDaiLy = DAILY.MaDaiLy AND NgayLapPhieu >= ? AND NgayLapPhieu <= ?';
+    const datapayendmonth_2 = await query(conn, paymonth_2, [lastmonth, querydate2])
         .catch(e => res.send('Sorry! Something went wrong.'));
+    
+    const datapaybeginmonth_2 = await query(conn, paymonth_2, [ begindate, lastmonth])
+        .catch(e => res.send('Sorry! Something went wrong.'));
+
+    console.log('query of doanh thu cuoi: ', datapayendmonth_2);
+
+    console.log('query of doanh thu dau: ', datapaybeginmonth_2);
+
 
     var TongTriGia = 0;
     var SoPhieuThu = 0;
     var TyLe = 0;
+    var TongDoanhThu = 0;
 
     dataendmonth.forEach(function(data){
         var money = data.TienThu;
@@ -102,11 +128,22 @@ router.get('/doanh-so', basic.check(async(req, res) => {
         TongTriGia += money;
         SoPhieuThu += 1;
     })
-    TyLe=ThamSo;
 
+    dataendmonth_2.forEach(function(data){
+        var money = data.TienThu;
+        TongDoanhThu += money; 
+    })
+    
+    datebeginmonth_2.forEach(function(data){
+        var money = data.TienThu;
+        TongDoanhThu += money;
+    })
+
+    TyLe = TongTriGia / TongDoanhThu * 100;
+    var TyLe_2=TyLe.toFixed(3)
     var querymonth = querydate.substr(5,7);
     var queryyear = querydate.substr(0,4);
-    res.render('doanh_so/doanh_so_kq.ejs',{userData: datatendaily, TenDaiLy: key, SoPhieuThu: SoPhieuThu, TongTriGia: TongTriGia, TyLe: TyLe, querymonth: querymonth, queryyear: queryyear});
+    res.render('doanh_so/doanh_so_kq.ejs',{userData: datatendaily, TenDaiLy: key, SoPhieuThu: SoPhieuThu, TongTriGia: TongTriGia, TyLe: TyLe_2,TongDoanhThu: TongDoanhThu, querymonth: querymonth, queryyear: queryyear});
     
 }))
 

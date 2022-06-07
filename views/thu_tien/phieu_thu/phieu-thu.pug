@@ -25,6 +25,10 @@ html(lang='en')
     |     
     script.
         let dailys = !{JSON.stringify(arrayOfDaily)};
+        // let ThuVuotNo = !{JSON.stringify(ThuVuotNo)};
+        let ThuVuotNo = false;
+        var canSubmit = true;
+        const isCanSubmit = () => canSubmit;
         $(document).ready(function(){
             //set select box of tendaily
             var option = '';
@@ -48,24 +52,31 @@ html(lang='en')
             $('.ngaylapphieu').val(today);   
         
             $(document).on("click", ".TienNo", function(){
-                var empty = false;
-                var input = $(this).find('select, input[type="text"]');
-                input.each(function(){
-                    if(!$(this).val()){
-                        $(this).addClass("error");
-                        empty = true;
-                    } else{
-                        $(this).removeClass("error");
+                var iddaily = $("#madaily").val();
+                var daily = dailys.filter(data => data.MaDaiLy == iddaily)[0];
+                var tienno = daily.TienNo;
+                $("#TienNo").html("Tiền nợ: " + tienno);
+            });
+
+            const check = () => {
+                var iddaily = $("#madaily").val();
+                var daily = dailys.filter(data => data.MaDaiLy == iddaily)[0];
+                var tienno = daily.TienNo;
+                var tienthu = $("#amountmoney").val();
+                if (!ThuVuotNo)
+                    if (tienthu > tienno) {
+                        alert("Khong cho phep tien thu lon hon tien no!!");
+                        canSubmit = false;
                     }
-                });
-                $(this).parents("tr").find(".error").first().focus();
-                if(!empty)
-                {
-                  var id=$(input[0]).val();   
-                  var tienno=dailys.filter(data => data.MaDaiLy == id)[0].TienNo;
-                  return alert("So luong san co: " + tienno);
-                }             
-            }); 
+                    else {
+                        canSubmit = true;
+                    }
+                return canSubmit;
+            }
+            $(document).on("click", "#submit", function () {
+                if(check()) return confirm("are you sure?");
+                else return false;
+            });
         });
   body
     #wrapper
@@ -98,24 +109,27 @@ html(lang='en')
                 .col
                   label(for='phonenumber') S&#x1ED1; &dstrok;i&#x1EC7;n tho&#x1EA1;i
                   |               
-                  input#phonenumber.form-control(type='text', name='phonenumber', placeholder='0123456789', oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');", required='')
+                  input#phonenumber.form-control(type='text', name='phonenumber', placeholder='0123456789', oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*?)\\..*/g, '$1');", required='')
               |           
               .row
                 .col
                   label(for='address') &Dstrok;&#x1ECB;a ch&#x1EC9;
                   |               
                   input#address.form-control(type='address', name='address', placeholder='Địa chỉ')
-              |           
+              |
               .form-group
                 label(for='TienThu') S&#x1ED1; ti&#x1EC1;n thu
                 |             
-                input#amountmoney.form-control(type='text', name='TienThu', placeholder='Số tiền(vnd)', oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');", required='')
-              |           
+                input#amountmoney.form-control(type='text', name='TienThu', placeholder='Số tiền(vnd)', oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*?)\\..*/g, '$1');", required='')
+              |
               .form-group
-                button.btn.btn-danger.TienNo(type='button' name='TienNo') Xem n&#x1EE3; 
-              |           
+                  .container
+                      .row
+                        button.btn.btn-danger.col-sm-2.TienNo(type='button' ) Xem n&#x1EE3;
+                        #TienNo.col.align-items-center.align-self-center
+              |
               .d-grid
-                button.btn.btn-primary.btn-block(type='submit', onclick='return confirm("are you sure?")') L&#x1B0;u
+                button#submit.btn.btn-primary.btn-block(type='submit') L&#x1B0;u
 
 
 

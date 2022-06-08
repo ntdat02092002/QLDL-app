@@ -35,13 +35,9 @@ router.get('/doanh-so', basic.check(async(req, res) => {
         res.render('doanh_so/doanh_so_kq.ejs',{userData: datatendaily});
     }
     
-    var begindate;
-    datatendaily.forEach(function(data){
-        begindate = data.NgayTiepNhan;
-        begindate = begindate.toISOString().substring(0, 10);
-    })
+    var begindate = querydate +'-01';
     
-    console.log('NgayTiepNhan: ',begindate);
+    console.log('begin of querys month: ',begindate);
     var querydate2 = querydate + '-31';
     console.log('end of querys month: ', querydate2);
 
@@ -50,7 +46,7 @@ router.get('/doanh-so', basic.check(async(req, res) => {
     const dataendmonth = await query(conn, endmonth, [key, begindate, querydate2])
         .catch(e => res.send('Sorry! Something went wrong.'));
 
-    console.log('query of tien no cuoi thang: ', dataendmonth);
+    console.log('query of tien thu cuoi thang: ', dataendmonth);
 
     const endmonth_2='SELECT TienThu FROM PHIEUTHUTIEN, DAILY ' +
     'WHERE PHIEUTHUTIEN.MaDaiLy = DAILY.MaDaiLy AND NgayLapPhieu >= ? AND NgayLapPhieu <= ?';
@@ -78,7 +74,7 @@ router.get('/doanh-so', basic.check(async(req, res) => {
     const datapayendmonth = await query(conn, paymonth, [key, lastmonth, querydate2])
         .catch(e => res.send('Sorry! Something went wrong.'));
     
-    console.log('query of tien thu cuoi: ', datapayendmonth);
+    console.log('query of doanh thu dai ly: ', datapayendmonth);
 
 
     const paymonth_2 = 'SELECT TienThu FROM PHIEUTHUTIEN, DAILY ' +
@@ -86,7 +82,7 @@ router.get('/doanh-so', basic.check(async(req, res) => {
     const datapayendmonth_2 = await query(conn, paymonth_2, [lastmonth, querydate2])
         .catch(e => res.send('Sorry! Something went wrong.'));
 
-    console.log('query of doanh thu cuoi: ', datapayendmonth_2);
+    console.log('query of tong doanh thu thang: ', datapayendmonth_2);
 
     var TongTriGia = 0;
     var SoPhieuThu = 0;

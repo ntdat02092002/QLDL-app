@@ -65,7 +65,7 @@ html(lang='en')
                 var tienthu = $("#amountmoney").val();
                 if (!ThuVuotNo)
                     if (tienthu > tienno) {
-                        alert("Khong cho phep tien thu lon hon tien no!!");
+                        alert("Khong cho phep tien thu lon hon tien no!! No hien tai: "+ tienno);
                         canSubmit = false;
                     }
                     else {
@@ -84,6 +84,8 @@ html(lang='en')
         div
           .row.justify-content-around
             form.col-md-6.bg-secondary.p-3.mb-3.text-white(action='/thu-tien/phieu-thu', method='post')
+              a.goback(href='/')
+                i.fa.fa-chevron-circle-left.fa-sm(aria-hidden='true', style='font-size: 45px;')
               h1.text-center.text-uppercase.h3 PHI&#x1EBE;U THU TI&#x1EC0;N
               |  
               |           

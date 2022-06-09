@@ -13,8 +13,6 @@ const basic = auth.basic({
     file: path.join(__dirname, '../users.htpasswd'),
 });
 
-
-//phieu thu
 router.get('/', basic.check(async (req, res) => {  
     const conn = await connection().catch(e => {});
     const sql_1 = "SELECT MaDaiLy, TenDaiLy, TienNo, DiaChi, Email " +

@@ -1,0 +1,37 @@
+doctype html
+head
+  meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
+  title TI&#x1EBE;P NH&#x1EAC;N &Dstrok;&#x1EA0;I L&Yacute;
+  // Nhúng file CSS
+  link(rel='stylesheet' href='dang-ki.css')
+// Nhúng file JavaScript
+script(language='javascript' src='dang-ki.js')
+form(action='' method='POST' onsubmit='return validate()')
+  .register
+    h1 &Dstrok;&abreve;ng k&yacute; &dstrok;&#x1EA1;i l&yacute;
+    p Vui l&ograve;ng &dstrok;i&#x1EC1;n th&ocirc;ng tin &dstrok;&#x1EC3; &dstrok;&abreve;ng k&yacute;
+    hr
+    label(for='username')
+      b T&ecirc;n &dstrok;&#x1EA1;i l&yacute;
+    input#username(type='text' placeholder='Tên đại lý' name='username' value='' required='required')
+    label(for='username')
+      b Lo&#x1EA1;i &dstrok;&#x1EA1;i l&yacute;
+    input#username(type='text' placeholder='Loại đại lý' name='username' value='' required='required')
+    label(for='username')
+      b S&#x1ED1; &dstrok;i&#x1EC7;n tho&#x1EA1;i
+    input#username(type='tel' name='username' required='true' pattern='[0-9]{10,}' title='Định dạng là nhập là: Nhập 10 số xxxxxxxxxx')
+    label(for='username')
+      b &Dstrok;&#x1ECB;a ch&#x1EC9;
+    input#username(type='text' placeholder='Địa chỉ' name='username' value='' required='required')
+    label(for='username')
+      b Qu&#x1EAD;n
+    input#username(type='text' placeholder='Quận' name='username' value='' required='required')
+    label(for='date')
+      b Ng&agrave;y ti&#x1EBF;p nh&#x1EAD;n
+    input(type='date')
+    hr
+    p
+      | Vui l&ograve;ng &dstrok;&#x1ED3;ng &yacute; v&#x1EDB;i &dstrok;i&#x1EC1;u kho&#x1EA3;n c&#x1EE7;a ch&uacute;ng t&ocirc;i 
+      a(href='#') Terms &amp; Privacy
+      | .
+    button.submit(type='submit') &Dstrok;&abreve;ng k&yacute;

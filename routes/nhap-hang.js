@@ -31,7 +31,7 @@ router.get('/', basic.check(async (req, res) => {
     const TyLeXuat = ThamSo[0].GiaTri;
 
     conn.end();
-    res.render('xuat_hang/xuat-hang.pug', {arrayOfDaily: arrayOfDaily, arrayOfMathang: arrayOfMathang, TyLeXuat: TyLeXuat});
+    res.render('nhap_hang/nhap-hang.pug', {arrayOfDaily: arrayOfDaily, arrayOfMathang: arrayOfMathang, TyLeXuat: TyLeXuat});
 }));
 
 router.post('/submit', basic.check(async (req,res) => {
@@ -47,26 +47,21 @@ router.post('/submit', basic.check(async (req,res) => {
     let arrayOfCT_PXH = [];
     for (let i = 0; i <  data.MaMatHang.length; i++) {
         let MaMatHang = parseInt(data.MaMatHang[i]);
-        let SoLuongXuat = parseInt(data.SoLuong[i]);
+        let SoLuongNhap = parseInt(data.SoLuong[i]);
         let DonGiaXuat = parseInt(data.DonGia[i]);
         let ThanhTien = parseInt(data.ThanhTien[i]);
-        arrayOfCT_PXH.push([MaPhieuXuat, MaMatHang, SoLuongXuat, DonGiaXuat, ThanhTien]);
+        arrayOfCT_PXH.push([MaPhieuNhap, MaMatHang, SoLuongXuat, DonGiaNhap, ThanhTien]);
 
         const sql_2 = "UPDATE MATHANG SET SoLuongTon = SoLuongTon - ? WHERE MaMatHang = ?";
         await query(conn, sql_2, [SoLuongXuat, MaMatHang])
             .catch(e => {res.send('Sorry! Something went wrong.'); console.log(e)});
     }
-
-    const sql_3 = "INSERT INTO CT_PXH (MaPhieuXuat, MaMatHang, SoLuongXuat, DonGiaXuat, ThanhTien) VALUES ?";
-    await query(conn, sql_3, [arrayOfCT_PXH])
-        .catch(e => {res.send('Sorry! Something went wrong.'); console.log(e)});
-
-    const sql_4 = "UPDATE DAILY SET TienNo = TienNo + ? WHERE MaDaiLy = ?";
+  const sql_4 = "UPDATE DAILY SET TienNo = TienNo + ? WHERE MaDaiLy = ?";
     await query(conn, sql_4, [parseInt(data.ConLai), parseInt(data.MaDaiLy)])
         .catch(e => {res.send('Sorry! Something went wrong.'); console.log(e)});
 
     conn.end();
-    res.render("xuat_hang/xuat-hang-submitted.pug");
+    res.render("nhap_hang/nhap-hanghang_submitted.pug");
 }));
 
 module.exports = router;

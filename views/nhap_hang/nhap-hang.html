@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Phiếu nhập hàng</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round|Open+Sans">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../../public/css/nhap_hang/nhap-hang.css">
+    <script>
+        var canSubmit = true;
+        const isCanSubmit = () => canSubmit;
+
+        $(document).ready(function(){
+            var datas = [
+                {
+                    MaMatHang: 1,
+                    TenMatHang: "mathang1",
+                    DonGiaNhap: "123",
+                    TenDVT: "quyen",
+                    SoLuongTon: 100,
+                },
+                {
+                    MaMatHang: 2,
+                    TenMatHang: "mathang2",
+                    DonGiaNhap: "345",
+                    TenDVT: "hop",
+                    SoLuongTon: 100,
+                },
+                {
+                    MaMatHang: 3,
+                    TenMatHang: "mathang3",
+                    DonGiaNhap: "567",
+                    TenDVT: "cai",
+                    SoLuongTon: 100,
+                },
+            ];
+            var dailys = [
+            {
+                    MaDaiLy: 1,
+                    TenDaiLy: "daily1",
+                    TienNo: 10,
+                    SoNoToiDa: 100000
+                },
+                {
+                    MaDaiLy: 2,
+                    TenDaiLy: "daily2",
+                    TienNo: 10,
+                    SoNoToiDa: 100000
+                },
+                {
+                    MaDaiLy: 3,
+                    TenDaiLy: "daily3",
+                    TienNo: 10,
+                    SoNoToiDa: 100000
+                },
+            ];
+            var TyLeXuat = 100;
+
+            $('[data-toggle="tooltip"]').tooltip();
+            var actions = '<a class="add" title=""  data-original-title="Add"><i class="material-icons">&#xE03B;</i></a> \n' +
+            //'<a class="edit" title=""  data-original-title="Edit"><i class="material-icons">&#xE254;</i></a> \n' +
+            '<a class="delete" title=""  data-original-title="Delete"><i class="material-icons">&#xE872;</i></a> \n';
+            // Append table with add row form on add new button click
+            $(".add-new").click(function(){
+                if (datas.length == 0)
+                {
+                    return alert("khong co hang trong kho");
+                }
+                $(this).attr("disabled", "disabled");
+                var index = $("table tbody tr:last-child").index();
+
+                var list = '';
+                $.each(datas, function(i, data) {
+                    list += '<option value="'+data.MaMatHang +'">'+data.TenMatHang+'</option>';
+                })
+                var row = '<tr>' +
+                    '<td><select class="form-control" name="Mặt hàng" id="mathang" > ' +
+                        list +
+                    '</select></td>' +
+                    '<td><input type="text" class="form-control" name="DonViTinh" id="donvitinh" disabled value=" "></td>' +
+                    '<td><input type="text" class="form-control" name="SoLuong" id="soluong" oninput="this.value = this.value.replace(/[^0-9.]/g, \'\').replace(/(\\..*?)\\..*/g, \'$1\');"></td>' +
+                    '<td><input type="text" class="form-control" name="DonGia" id="dongia" disabled value=" "> </td>' +
+                    '<td><input type="text" class="form-control" name="ThanhTien" id="thanhtien" disabled value=" "></td>' +
+                    '<td>' + actions + '</td>' +
+                    '</tr>';
+                $("table").append(row);
+                $("table tbody tr").eq(index + 1).find(".add, .edit").toggle();
+                $('[data-toggle="tooltip"]').tooltip();
+            });
+            // Add row on add button click
+            $(document).on("click", ".add", function(){
+                var empty = false;
+                var input = $(this).parents("tr").find('select, input[type="text"]');
+                input.each(function(){
+                    if(!$(this).val()){
+                        $(this).addClass("error");
+                        empty = true;
+                    } else{
+                        $(this).removeClass("error");
+                    }
+                });
+                $(this).parents("tr").find(".error").first().focus();
+                if(!empty){
+
+                    var id = $(input[0]).val();
+                    var name = datas.filter(data => data.MaMatHang == id)[0].TenMatHang;
+                    var donvitinh = datas.filter(data => data.MaMatHang == id)[0].TenDVT;
+                    var soluong = $(input[2]).val();
+                    var soluongton = datas.filter(data => data.MaMatHang == id)[0].SoLuongTon;
+                    if (soluongton < soluong)
+                    {
+                        return alert("So luong san co: " + soluongton);
+                    }
+                    datas.filter(data => data.MaMatHang == id)[0].SoLuongTon = soluongton - soluong;
+                    var dongia = Math.round(datas.filter(data => data.MaMatHang == id)[0].DonGiaNhap * (TyLeXuat/100));
+                    var thanhtien = dongia*soluong;
+                    var valuesInput = [id, donvitinh, soluong, dongia, thanhtien];
+                    var valuesDisplay = [name, donvitinh, soluong, dongia, thanhtien];
+                    var names = ["MaMatHang", "DonViTinh", "SoLuong", "DonGia", "ThanhTien"];
+                    input.each(function(i){
+                        $(this).parent("td").html(
+                            '<div>'+valuesDisplay[i]+'</div>' +
+                            '<input type="hidden" name="'+names[i] +'[]" value="' + valuesInput[i] +'">'
+                        );
+                    });
+
+                    var tongtien = parseInt($("#tongtien").html()) + thanhtien;
+                    $("#tongtien").html(tongtien);
+                    $("#inputtongtien").val(tongtien);
+
+                    $(this).parents("tr").find(".add, .edit").toggle();
+                    $(".add-new").removeAttr("disabled");
+                }
+            });
+            // // Edit row on edit button click
+            // $(document).on("click", ".edit", function(){
+            //     $(this).parents("tr").find("td:not(:last-child)").each(function(){
+            //         $(this).html('<input type="text" class="form-control" value="' + $(this).text() + '">');
+            //     });
+            //     $(this).parents("tr").find(".add, .edit").toggle();
+            //     $(".add-new").attr("disabled", "disabled");
+            // });
+            // Delete row on delete button click
+            $(document).on("click", ".delete", function(){
+                var td = $(this).parents("tr").find('td');
+                // re-calculate thanh tien
+                var divthanhtien = ($(td[4]).find("div"))[0];
+                var thanhtien = $(divthanhtien).html() || 0;
+                var tongtien = parseInt($("#tongtien").html()) - thanhtien;
+                $("#tongtien").html(tongtien);
+                $("#inputtongtien").val(tongtien);
+                $(this).parents("tr").remove();
+                $(".add-new").removeAttr("disabled");
+            });
+
+            //set select box of tendaily
+            var option = '';
+            $.each(dailys, function(i, item) {
+                option += '<option value="'+item.MaDaiLy +'">'+item.TenDaiLy+'</option>';
+            });
+            $('.tendaily').html(
+                '<select class="form-control" name="MaDaiLy" id="madaily" > ' +
+                option +
+                '</select>'
+            );
+
+            //set default day
+            var now = new Date();
+            var month = (now.getMonth() + 1);
+            var day = now.getDate();
+            if (month < 10)
+                month = "0" + month;
+            if (day < 10)
+                day = "0" + day;
+            var today = now.getFullYear() + '-' + month + '-' + day;
+            $('.ngaylapphieu').val(today);
+
+           //calculate so tien con lai:
+            $(document).on("click", ".check-conlai", function(){
+                var tongtien = parseInt($("#tongtien").html());
+                var sotientra =  parseInt($("#sotientra").val())
+                var conlai = tongtien - sotientra;
+                $("#conlai").html(conlai);
+                $("#inputconlai").val(conlai);
+
+                var iddaily = $("#madaily").val();
+                var daily = dailys.filter(data => data.MaDaiLy == iddaily)[0];
+                var notoidacothe = daily.SoNoToiDa - daily.TienNo;
+                if (conlai > notoidacothe) {
+                    alert("So tien con lai vuot qua so tien co the tiep tuc no");
+                    $("#submit").attr("disabled", "disabled");
+                    canSubmit = false;
+                }
+                else {
+                    $("#submit").removeAttr("disabled");
+                    canSubmit = true;
+                }
+
+            });
+        });
+    </script>
+</head>
+<body>
+    
+<div class="container-lg">
+    <div class="table-responsive">
+        <form action="/nhap-hang/submit" method="post">
+            <div class="table-wrapper">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <a href="/" class="goback"><i class="fa fa-chevron-circle-left fa-3x" aria-hidden="true"></i></a>
+                        </div>
+                        <div class="col-sm-8 text-center"><h1>Phiếu nhập hàng</h1></div>
+                    </div>
+                </div>
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <h2>Tên đại lý</h2>
+                            <div class="tendaily"></div>
+                        </div>
+                        <div class="col-sm-4">
+                            <h2>Ngày lập phiếu</h2>
+                            <input type="date" class="form-control ngaylapphieu" name="NgayLapPhieu">
+                        </div>
+                        <div class="col-sm-4 align-self-end">
+                            <button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Thêm hàng mới</button>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Mặt hàng</th>
+                        <th>Đơn vị tính</th>
+                        <th>Số lượng</th>
+                        <th>Đơn giá</th>
+                        <th>Thành tiền</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-8 text-right">Tổng tiền:</div>
+                        <div class="col-sm-4" id="tongtien">
+                            0
+                        </div>
+                        <input type="hidden" name="TongTien" id="inputtongtien" value="0">
+                    </div>
+                </div>
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-8 text-right">Số tiền trả:</div>
+                        <input class="col-sm-2 form-control" type="text" id="sotientra" value="0" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                    </div>
+                </div>
+                <div class="table-title">
+                    <div class="row">
+                        <!--<div class="col-sm-8 text-right">Còn lại:</div>-->
+                        <div class="col-sm-8 text-righ">
+                            <button type="button" class="btn btn-success check-conlai">Còn lại:</button>
+                        </div>
+                        <div class="col-sm-2" id="conlai"></div>
+                        <input type="hidden" name="ConLai" id="inputconlai" value="0">
+                    </div>
+                </div>
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-8"></div>
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-2">
+                            <button type="submit" class="btn btn-primary" id="submit" onclick='$(".check-conlai").click(); if(isCanSubmit()) return confirm("are you sure?")'>submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
